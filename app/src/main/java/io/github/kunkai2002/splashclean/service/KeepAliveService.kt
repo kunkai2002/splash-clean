@@ -139,6 +139,12 @@ class BootReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         A11yGuard.ensureEnabled(context, intent.action ?: "boot")
         GuardJob.schedule(context)
+        if (Prefs.value.dnsBlockEnabled && android.net.VpnService.prepare(context) == null) {
+            io.github.kunkai2002.splashclean.vpn.DnsVpnService.start(context)
+        }
+        if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
+            io.github.kunkai2002.splashclean.adb.ShakeBlocker.scheduleAfterBoot(context)
+        }
     }
 }
 

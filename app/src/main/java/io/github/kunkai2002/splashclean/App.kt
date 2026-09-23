@@ -23,6 +23,9 @@ class App : Application() {
         RuleRepository.init(this)
         A11yGuard.ensureEnabled(this, "app start")
         GuardJob.schedule(this)
+        if (Prefs.value.dnsBlockEnabled && android.net.VpnService.prepare(this) == null) {
+            io.github.kunkai2002.splashclean.vpn.DnsVpnService.start(this)
+        }
         scope.launch {
             // Refresh third-party subscriptions at most once every 12 hours.
             val s = Prefs.value

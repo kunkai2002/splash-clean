@@ -39,6 +39,10 @@ data class Settings(
     val dnsUpstream: String = "",
     val dnsAllowlist: Set<String> = emptySet(),
     val shakeBlockApps: Set<String> = emptySet(),
+    /** Apps whose sensors were last switched off successfully (to undo removed ones). */
+    val shakeAppliedApps: Set<String> = emptySet(),
+    val shakeLastApply: Long = 0,
+    val shakeLastError: String? = null,
     val onboardingDone: Boolean = false,
     val guardAccessibility: Boolean = true,
 )

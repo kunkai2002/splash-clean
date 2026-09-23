@@ -45,13 +45,18 @@ object Pages {
     const val AUTHORIZE = "authorize"
     const val EXCLUDE = "exclude"
     const val GUIDE = "guide"
+    const val SHAKE = "shake"
 }
 
 @Composable
 fun MainScaffold() {
     var tab by rememberSaveable { mutableIntStateOf(0) }
     var page by rememberSaveable { mutableStateOf<String?>(null) }
-    BackHandler(enabled = page != null) { page = null }
+    val context = androidx.compose.ui.platform.LocalContext.current
+    BackHandler(enabled = page != null) {
+        if (page == Pages.SHAKE) io.github.kunkai2002.splashclean.adb.ShakeBlocker.applyAsync(context)
+        page = null
+    }
     val open: (String) -> Unit = { page = it }
     Scaffold(
         bottomBar = {
@@ -79,6 +84,10 @@ fun MainScaffold() {
         when (page) {
             Pages.AUTHORIZE -> AuthorizeScreen(m) { page = null }
             Pages.EXCLUDE -> AppPickerScreen(m) { page = null }
+            Pages.SHAKE -> AppPickerScreen(m, shake = true) {
+                page = null
+                io.github.kunkai2002.splashclean.adb.ShakeBlocker.applyAsync(context)
+            }
             Pages.GUIDE -> GuideScreen(m) { page = null }
             else -> when (tab) {
                 0 -> HomeScreen(m, open) { tab = 1 }

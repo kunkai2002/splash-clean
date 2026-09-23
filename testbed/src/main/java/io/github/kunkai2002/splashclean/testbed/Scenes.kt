@@ -171,6 +171,38 @@ class UpdateScene : Scene() {
     }
 }
 
+/** Counts accelerometer events per second, like a "shake to open" splash ad would listen. */
+class ShakeScene : Scene() {
+    override val scene = "shake"
+    private var count = 0
+    private val listener = object : android.hardware.SensorEventListener {
+        override fun onSensorChanged(event: android.hardware.SensorEvent?) { count++ }
+        override fun onAccuracyChanged(sensor: android.hardware.Sensor?, accuracy: Int) {}
+    }
+    private val handler = Handler(Looper.getMainLooper())
+    private val tick = object : Runnable {
+        override fun run() {
+            Log.i(TAG, "SENSOR shake events/s=$count")
+            count = 0
+            handler.postDelayed(this, 1000)
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        showContent()
+        val sm = getSystemService(android.hardware.SensorManager::class.java)
+        sm.registerListener(listener, sm.getDefaultSensor(android.hardware.Sensor.TYPE_ACCELEROMETER), android.hardware.SensorManager.SENSOR_DELAY_GAME)
+        handler.postDelayed(tick, 1000)
+    }
+
+    override fun onDestroy() {
+        getSystemService(android.hardware.SensorManager::class.java).unregisterListener(listener)
+        handler.removeCallbacks(tick)
+        super.onDestroy()
+    }
+}
+
 /** Video player with "跳过片头": must NOT be tapped (false-positive check). */
 class IntroScene : Scene() {
     override val scene = "intro"

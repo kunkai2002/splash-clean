@@ -113,7 +113,7 @@
 
     <string name="pair_title">On the phone only (Android 11+)</string>
     <string name="pair_unsupported">Android 10 and older cannot pair wirelessly; use the computer method.</string>
-    <string name="pair_steps">1. Tap Start: Developer options open.\n2. Turn on Wireless debugging (connect to any Wi-Fi first).\n3. Tap \"Pair device with pairing code\" and keep that dialog open.\n4. Type the 6-digit code into the notification from SplashClean (pull down the notification shade).</string>
+    <string name="pair_steps">1. Tap Start: Developer options open.\n2. Turn on Wireless debugging (connect to any Wi-Fi first); tick \"Always allow on this network\" and tap Allow.\n3. Tap \"Pair device with pairing code\" and keep that dialog open.\n4. Pull down the notification shade and type the 6-digit code into SplashClean\'s notification (tap its arrow if the \"Enter code\" button is hidden).</string>
     <string name="pair_start">Start</string>
     <string name="pair_reconnect">Already paired: run again</string>
     <string name="pair_code_hint">6-digit pairing code</string>
@@ -172,4 +172,33 @@
     <string name="channel_events">Captures and authorization</string>
     <string name="status_running">SplashClean is running</string>
     <string name="status_today">%1$d ads skipped today</string>
+
+    <string name="dns_title">Block ad servers (local VPN)</string>
+    <string name="dns_desc">Stops apps from downloading ads from third-party ad networks (Pangle, GDT, Baidu, Kuaishou, Sigmob…). Only DNS lookups go through it; nothing leaves the phone. It cannot block the in-house ads of big apps (Taobao, JD, Zhihu, Bilibili…) — skipping still handles those. It uses the phone\'s single VPN slot: it cannot run together with another VPN or proxy app.</string>
+    <string name="dns_switch">Block ad servers</string>
+    <string name="dns_off">Off</string>
+    <string name="dns_stats">On · blocked %1$d · allowed %2$d · %3$d rules</string>
+    <string name="dns_private_dns">Private DNS is set to a specific server, which bypasses this filter. Set Private DNS to Off or Automatic.</string>
+    <string name="dns_upstream">Resolver: %1$s</string>
+    <string name="dns_recent">Recently blocked:\n%1$s</string>
+    <string name="dns_list_updated">Block list (AWAvenue Ads Rule) updated %1$s</string>
+    <string name="dns_list_builtin">Block list: AWAvenue Ads Rule, copy bundled with the app</string>
+    <string name="dns_update">Update block list</string>
+    <string name="dns_update_ok">Block list updated: %1$d rules</string>
+    <string name="dns_update_failed">Could not update the block list: %1$s</string>
+    <string name="dns_notification">Blocking ad servers</string>
+    <string name="dns_stop">Stop</string>
+
+    <string name="shake_title">No \"shake to open\"</string>
+    <string name="shake_desc">Some splash ads open another app or a shop page when the phone moves. For the apps you pick, SplashClean switches off the motion sensors, so shaking does nothing there. Side effect: those apps also lose their own shake, step or compass features (screen rotation keeps working). Needs the one-time authorization; after a reboot it is re-applied automatically the next time the phone is on Wi-Fi.</string>
+    <string name="shake_pick">Apps without motion sensors</string>
+    <string name="shake_pick_hint">Pick apps that show \"shake / twist / tilt\" ads. Changes apply when you go back.</string>
+    <string name="shake_picked">%1$d apps chosen</string>
+    <string name="shake_need_auth">Needs the one-time authorization first (Settings → Stay on for good).</string>
+    <string name="shake_need_wifi">Could not reach wireless debugging. Connect to Wi-Fi and try again.</string>
+    <string name="shake_error">Last attempt failed: %1$s</string>
+    <string name="shake_active">Sensors off in %1$d apps (applied %2$s)</string>
+    <string name="shake_inactive">Not applied</string>
+    <string name="shake_apply">Apply now</string>
+    <string name="shake_applying">Applying…</string>
 </resources>

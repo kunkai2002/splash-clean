@@ -13,5 +13,6 @@
         <activity android:name=".CanvasScene" android:exported="true" android:launchMode="singleTask" />
         <activity android:name=".UpdateScene" android:exported="true" android:launchMode="singleTask" />
         <activity android:name=".IntroScene" android:exported="true" android:launchMode="singleTask" />
+        <activity android:name=".ShakeScene" android:exported="true" android:launchMode="singleTask" />
     </application>
 </manifest>

@@ -113,7 +113,7 @@
 
     <string name="pair_title">只用手机授权（Android 11+）</string>
     <string name="pair_unsupported">Android 10 及以下不能无线配对，请用电脑授权。</string>
-    <string name="pair_steps">1. 点「开始」，会打开开发者选项。\n2. 开启「无线调试」（先连上任意 Wi-Fi）。\n3. 点「使用配对码配对设备」，让那个对话框保持打开。\n4. 下拉通知栏，在开屏净的通知里输入 6 位配对码。</string>
+    <string name="pair_steps">1. 点「开始」，会打开开发者选项。\n2. 开启「无线调试」（先连上任意 Wi-Fi），勾选「一律允许使用这个网络」后点「允许」。\n3. 点「使用配对码配对设备」，让那个对话框保持打开。\n4. 下拉通知栏，在开屏净的通知里输入 6 位配对码（看不到「输入配对码」按钮时，点通知右边的箭头展开）。</string>
     <string name="pair_start">开始</string>
     <string name="pair_reconnect">已配对过：重新执行</string>
     <string name="pair_code_hint">6 位配对码</string>
@@ -172,4 +172,33 @@
     <string name="channel_events">抓取与授权</string>
     <string name="status_running">开屏净运行中</string>
     <string name="status_today">今天已跳过 %1$d 次</string>
+
+    <string name="dns_title">拦截广告网址（本机 VPN）</string>
+    <string name="dns_desc">让应用下载不到第三方广告联盟的广告（穿山甲、优量汇、百度、快手、Sigmob…）。只有域名查询经过它，任何数据都不会离开手机。淘宝、京东、知乎、B站等大应用的自家广告拦不住，那部分仍靠自动跳过。它会占用手机唯一的 VPN 位置：不能和其他 VPN 或代理软件同时开。</string>
+    <string name="dns_switch">拦截广告网址</string>
+    <string name="dns_off">未开启</string>
+    <string name="dns_stats">已开启 · 拦截 %1$d 次 · 放行 %2$d 次 · 规则 %3$d 条</string>
+    <string name="dns_private_dns">「私人 DNS」设成了指定服务器，会绕过拦截。请改成「关闭」或「自动」。</string>
+    <string name="dns_upstream">解析服务器：%1$s</string>
+    <string name="dns_recent">最近拦截：\n%1$s</string>
+    <string name="dns_list_updated">拦截清单（秋风广告规则）%1$s 更新</string>
+    <string name="dns_list_builtin">拦截清单：秋风广告规则（随应用附带的版本）</string>
+    <string name="dns_update">更新拦截清单</string>
+    <string name="dns_update_ok">拦截清单已更新：%1$d 条</string>
+    <string name="dns_update_failed">更新拦截清单失败：%1$s</string>
+    <string name="dns_notification">正在拦截广告网址</string>
+    <string name="dns_stop">停止</string>
+
+    <string name="shake_title">防「摇一摇」</string>
+    <string name="shake_desc">有些开屏广告只要手机一晃就会跳到别的应用或购物页。对你选的应用，开屏净会关掉它们的动作感应器，晃手机就不会触发。副作用：这些应用自己的摇一摇、计步、指南针也会失效（屏幕旋转不受影响）。需要先完成一次授权；重启后会在下次连上 Wi-Fi 时自动重新生效。</string>
+    <string name="shake_pick">关掉动作感应的应用</string>
+    <string name="shake_pick_hint">选会出「摇一摇／扭一扭／转动手机」广告的应用。返回时生效。</string>
+    <string name="shake_picked">已选 %1$d 个应用</string>
+    <string name="shake_need_auth">需要先完成一次授权（设置 → 长期不掉）。</string>
+    <string name="shake_need_wifi">连不上无线调试。请连上 Wi-Fi 后再试。</string>
+    <string name="shake_error">上次失败：%1$s</string>
+    <string name="shake_active">已关掉 %1$d 个应用的动作感应（%2$s 生效）</string>
+    <string name="shake_inactive">尚未生效</string>
+    <string name="shake_apply">立即生效</string>
+    <string name="shake_applying">正在生效…</string>
 </resources>

@@ -74,6 +74,8 @@ fun SettingsScreen(modifier: Modifier, open: (String) -> Unit) {
                 }
             }
         }
+        item { ShakeSection(open) }
+        item { DnsSection() }
         item {
             SectionCard(stringResource(R.string.set_teach_title)) {
                 Text(stringResource(R.string.set_teach_desc), style = MaterialTheme.typography.bodySmall)
@@ -213,11 +215,19 @@ fun GuideScreen(modifier: Modifier, onBack: () -> Unit) {
     }
 }
 
+/** [shake] = pick apps whose motion sensors are switched off; otherwise pick apps to leave alone. */
 @Composable
-fun AppPickerScreen(modifier: Modifier, onBack: () -> Unit) {
+fun AppPickerScreen(modifier: Modifier, shake: Boolean = false, onBack: () -> Unit) {
     val context = LocalContext.current
     val s by Prefs.flow.collectAsState()
     var query by remember { mutableStateOf("") }
+    val selected = if (shake) s.shakeBlockApps else s.disabledApps
+    val toggle: (String) -> Unit = { id ->
+        Prefs.update { st ->
+            if (shake) st.copy(shakeBlockApps = if (id in st.shakeBlockApps) st.shakeBlockApps - id else st.shakeBlockApps + id)
+            else st.copy(disabledApps = if (id in st.disabledApps) st.disabledApps - id else st.disabledApps + id)
+        }
+    }
     val apps = remember {
         val pm = context.packageManager
         InstalledApps.apps.values
@@ -226,20 +236,21 @@ fun AppPickerScreen(modifier: Modifier, onBack: () -> Unit) {
             .sortedBy { it.second }
     }
     Column(modifier.fillMaxSize()) {
-        SubPageBar(stringResource(R.string.set_exclude), onBack)
+        SubPageBar(stringResource(if (shake) R.string.shake_pick else R.string.set_exclude), onBack)
         OutlinedTextField(
             value = query, onValueChange = { query = it }, singleLine = true,
             placeholder = { Text(stringResource(R.string.search)) },
             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
         )
-        Text(stringResource(R.string.exclude_hint), style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(16.dp))
+        Text(
+            stringResource(if (shake) R.string.shake_pick_hint else R.string.exclude_hint),
+            style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(16.dp),
+        )
         LazyColumn {
             items(apps.filter { query.isBlank() || it.second.contains(query, true) || it.first.contains(query, true) }, key = { it.first }) { (id, label) ->
-                val builtin = id in InstalledApps.builtinBlocked
+                val builtin = !shake && id in InstalledApps.builtinBlocked
                 Row(
-                    Modifier.fillMaxWidth().clickable(enabled = !builtin) {
-                        Prefs.update { st -> st.copy(disabledApps = if (id in st.disabledApps) st.disabledApps - id else st.disabledApps + id) }
-                    }.padding(horizontal = 16.dp, vertical = 4.dp),
+                    Modifier.fillMaxWidth().clickable(enabled = !builtin) { toggle(id) }.padding(horizontal = 16.dp, vertical = 4.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Column(Modifier.weight(1f)) {
@@ -249,7 +260,7 @@ fun AppPickerScreen(modifier: Modifier, onBack: () -> Unit) {
                             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
-                    Checkbox(checked = builtin || id in s.disabledApps, onCheckedChange = null, enabled = !builtin)
+                    Checkbox(checked = builtin || id in selected, onCheckedChange = null, enabled = !builtin)
                 }
                 HorizontalDivider()
             }

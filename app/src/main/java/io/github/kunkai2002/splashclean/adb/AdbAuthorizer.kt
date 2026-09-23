@@ -183,7 +183,6 @@ object AdbAuthorizer {
             add("cmd appops set $pkg RUN_ANY_IN_BACKGROUND allow")
             add("cmd appops set $pkg RUN_IN_BACKGROUND allow")
             if (Build.VERSION.SDK_INT >= 33) add("pm grant $pkg android.permission.POST_NOTIFICATIONS")
-            Prefs.value.shakeBlockApps.forEach { add("cmd sensorservice set-uid-state $it idle") }
         }
         val log = StringBuilder()
         for (cmd in commands) {
@@ -193,12 +192,26 @@ object AdbAuthorizer {
         runCatching { m.disconnect() }
         check(A11yGuard.hasWriteSecureSettings(context)) { log.toString() + "\n" + context.getString(R.string.pair_grant_failed) }
         A11yGuard.ensureEnabled(context, "adb grant")
+        if (Prefs.value.shakeBlockApps.isNotEmpty()) ShakeBlocker.apply(context)
         log.toString()
     }
 
-    private fun shell(m: SelfAdbManager, cmd: String): String {
+    internal fun shell(m: SelfAdbManager, cmd: String): String {
         m.openStream("shell:$cmd").use { stream ->
-            return stream.openInputStream().bufferedReader().readText()
+            val input = stream.openInputStream()
+            val out = java.io.ByteArrayOutputStream()
+            val buf = ByteArray(4096)
+            try {
+                while (true) {
+                    val n = input.read(buf)
+                    if (n < 0) break
+                    out.write(buf, 0, n)
+                }
+            } catch (e: java.io.IOException) {
+                // libadb reports the end of a command's output as "Stream closed."
+                if (e.message?.contains("closed", ignoreCase = true) != true) throw e
+            }
+            return out.toString(Charsets.UTF_8.name())
         }
     }
 
@@ -208,9 +221,14 @@ object AdbAuthorizer {
         Notifications.ensureChannels(context)
         val nm = context.getSystemService(NotificationManager::class.java)
         val b = NotificationCompat.Builder(context, Notifications.CHANNEL_EVENTS)
-            .setSmallIcon(io.github.kunkai2002.splashclean.R.drawable.ic_stat)
+            .setSmallIcon(R.drawable.ic_stat)
             .setOngoing(true)
-            .setOnlyAlertOnce(true)
+            .setOnlyAlertOnce(port == null)
+            // Own group + high priority: shown expanded (with the reply button) instead of folded
+            // under the app's other notifications.
+            .setGroup("pairing")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setContentIntent(Notifications.openApp(context))
         if (port == null) {
             b.setContentTitle(context.getString(R.string.pair_notify_searching))
