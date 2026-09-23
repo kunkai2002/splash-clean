@@ -1,0 +1,35 @@
+[versions]
+agp = "9.4.0"
+kotlin = "2.4.10"
+serialization = "1.11.0"
+coroutines = "1.11.0"
+compose = "1.12.0"
+lifecycle = "2.11.0"
+
+[libraries]
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+json5 = "li.songe:json5:0.7.0"
+exp4j = "net.objecthunter:exp4j:0.4.8"
+androidx-core-ktx = "androidx.core:core-ktx:1.19.0"
+androidx-activity-compose = "androidx.activity:activity-compose:1.13.0"
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
+compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
+compose-material3 = "androidx.compose.material3:material3:1.4.0"
+compose-icons = "androidx.compose.material:material-icons-extended:1.7.8"
+onnxruntime-android = "com.microsoft.onnxruntime:onnxruntime-android:1.30.0"
+libadb-android = "com.github.MuntashirAkon:libadb-android:3.1.1"
+conscrypt-android = "org.conscrypt:conscrypt-android:2.5.3"
+bouncycastle-pkix = "org.bouncycastle:bcpkix-jdk15to18:1.81"
+junit = "junit:junit:4.13.2"
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

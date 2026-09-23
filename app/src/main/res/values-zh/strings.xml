@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">开屏净</string>
+    <string name="a11y_description">开屏净会在应用打开后的头几秒自动点击开屏广告的「跳过」，并关闭弹窗广告和更新提示。它读取屏幕只是为了找到这些按钮，任何内容都不会离开你的手机。</string>
+    <string name="tile_capture">抓取广告</string>
+    <string name="back">返回</string>
+    <string name="search">搜索</string>
+
+    <string name="tab_home">首页</string>
+    <string name="tab_rules">规则</string>
+    <string name="tab_log">记录</string>
+    <string name="tab_settings">设置</string>
+
+    <string name="action_add">添加</string>
+    <string name="action_allow">允许</string>
+    <string name="action_authorize">去授权</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_capture">抓取当前画面</string>
+    <string name="action_copy">复制</string>
+    <string name="action_delete">删除</string>
+    <string name="action_enable">开启</string>
+    <string name="action_update">更新</string>
+    <string name="action_view">查看</string>
+
+    <string name="home_running">正在自动跳过广告</string>
+    <string name="home_not_running">尚未开启</string>
+    <string name="home_paused">已暂停</string>
+    <string name="home_rules_summary">已装应用中 %1$d 个有专属规则 · 全局规则 %2$d 条</string>
+    <string name="home_today">今天跳过</string>
+    <string name="home_total">累计跳过</string>
+    <string name="home_checklist">设置检查</string>
+    <string name="home_recent">最近跳过</string>
+    <string name="home_manage_rules">管理规则</string>
+
+    <string name="check_a11y">无障碍服务</string>
+    <string name="check_a11y_desc">用来看到并点击跳过按钮，必须开启</string>
+    <string name="check_a11y_ok">已开启</string>
+    <string name="check_guard">长期不掉</string>
+    <string name="check_guard_desc">授权一次，服务被关掉后会自己开回来</string>
+    <string name="check_guard_ok">已授权，服务会自我修复</string>
+    <string name="check_subs">社区规则</string>
+    <string name="check_subs_desc">补上约一千个应用的专属规则（从作者的链接下载）</string>
+    <string name="check_subs_ok">已订阅</string>
+    <string name="check_battery">电池：不限制</string>
+    <string name="check_battery_desc">避免系统在后台杀掉本应用</string>
+    <string name="check_battery_ok">已设为不限制</string>
+    <string name="check_notify">通知</string>
+    <string name="check_notify_desc">状态通知和「抓取当前画面」按钮要用</string>
+    <string name="check_brand">本机保活设置</string>
+    <string name="check_brand_desc">自启动、后台运行、最近任务锁定，一步步照做</string>
+
+    <string name="toast_skipped">已跳过广告</string>
+    <string name="toast_enabled_by_guard">服务已开启</string>
+    <string name="toast_subs_added">已添加：%1$s</string>
+    <string name="toast_subs_failed">添加订阅失败：%1$s</string>
+    <string name="toast_updated">已更新 %1$d 个订阅</string>
+    <string name="toast_copied">已复制</string>
+
+    <string name="log_title">跳过记录</string>
+    <string name="log_empty">还没有跳过任何广告。打开一个有开屏广告的应用试试。</string>
+    <string name="log_since_enter">打开后 %1$.1f 秒</string>
+    <string name="log_ocr_group">屏幕文字「%1$s」（认字）</string>
+
+    <string name="rules_title">规则</string>
+    <string name="rules_active">当前生效：%1$d 个应用的专属规则、%2$d 条全局规则、%3$d 个规则组</string>
+    <string name="rules_add_title">添加社区规则</string>
+    <string name="rules_add_desc">这些订阅使用 GKD 规则格式，由各自的作者维护。规则从作者自己的链接下载，不随本应用打包。</string>
+    <string name="rules_add_url">通过链接添加</string>
+    <string name="rules_builtin_title">内置规则</string>
+    <string name="rules_builtin_desc">通用的开屏广告、更新提示、青少年模式规则。社区订阅提供同类全局规则时，内置规则会自动让位。</string>
+    <string name="rules_mine_title">我的规则</string>
+    <string name="rules_mine_empty">用「抓取当前画面」教会的规则会显示在这里。</string>
+    <string name="rule_position">点击屏幕 %1$.0f%%、%2$.0f%% 的位置</string>
+    <string name="subs_meta">v%1$d · %2$d 个应用 · %3$d 个规则组 · %4$s 更新</string>
+    <string name="subs_error">上次更新失败：%1$s</string>
+    <string name="subs_categories">分类</string>
+    <string name="kind_splash">开屏广告</string>
+    <string name="kind_popup">弹窗</string>
+
+    <string name="set_skip_title">跳过</string>
+    <string name="set_ocr">按钮没有文字时截图认字</string>
+    <string name="set_ocr_desc">在打开应用的头几秒，从截图里找「跳过」（PaddleOCR，在手机上运行）</string>
+    <string name="set_ocr_unsupported">需要 Android 11 或以上</string>
+    <string name="set_toast">跳过后显示提示</string>
+    <string name="set_toast_desc">让你知道它有在工作</string>
+    <string name="set_autoupdate">自动更新订阅</string>
+    <string name="set_autoupdate_desc">应用启动时检查，最多每 12 小时一次</string>
+    <string name="set_exclude">不处理的应用</string>
+    <string name="set_exclude_desc">你选了 %1$d 个（微信与系统画面一律不处理）</string>
+    <string name="set_teach_title">漏网时教它</string>
+    <string name="set_teach_desc">有广告没被跳过时：趁广告还在，下拉快捷设置点「抓取广告」（或状态通知里的按钮）。之后打开这张截图，点一下跳过按钮的位置并保存。</string>
+    <string name="set_teach_open">打开抓取记录</string>
+    <string name="set_keep_title">保持运行</string>
+    <string name="set_notification">状态通知</string>
+    <string name="set_notification_desc">一条静默通知，避免应用被系统冻结</string>
+    <string name="set_guard">服务被关掉时自动开回来</string>
+    <string name="set_guard_desc_ok">已授权</string>
+    <string name="set_guard_desc_no">需要先完成下面的一次授权</string>
+    <string name="set_authorize_desc">用无线调试或电脑授权一次</string>
+    <string name="set_about_title">关于</string>
+    <string name="about_text">开屏净 %1$s。免费开源（GPL-3.0），没有广告、没有统计、不用登录；屏幕上的任何内容都不会离开手机。</string>
+    <string name="about_source">源代码</string>
+    <string name="about_licenses">使用了：GKD 选择器引擎与规则格式（GPL-3.0，gkd-kit/gkd）· PaddleOCR PP-OCRv4 模型（Apache-2.0）· ONNX Runtime（MIT）· libadb-android（GPL-3.0-or-later / Apache-2.0）· Conscrypt、Bouncy Castle。</string>
+
+    <string name="auth_status_ok">已授权</string>
+    <string name="auth_status_no">尚未授权</string>
+    <string name="auth_what">完成这一次授权后，无障碍服务被关掉（重启、清理软件、系统抽风）时，应用会自己把它开回来，也不用再过「受限制的设置」那一关。这个权限重启和更新后都还在，卸载应用才会消失。</string>
+    <string name="auth_pc_title">用电脑授权</string>
+    <string name="auth_pc_steps">开启 USB 调试，手机连上电脑，执行：</string>
+    <string name="auth_brand_title">开始前</string>
+    <string name="auth_brand_notes">小米／红米：另外开启「USB 调试（安全设置）」（需要插 SIM 卡并登录小米账号）。\nOPPO／一加／realme：在开发者选项里开启「禁止权限监控」。\n所有手机：在「关于手机」连点「版本号」7 次可打开开发者选项。</string>
+    <string name="auth_open_dev">打开开发者选项</string>
+
+    <string name="pair_title">只用手机授权（Android 11+）</string>
+    <string name="pair_unsupported">Android 10 及以下不能无线配对，请用电脑授权。</string>
+    <string name="pair_steps">1. 点「开始」，会打开开发者选项。\n2. 开启「无线调试」（先连上任意 Wi-Fi）。\n3. 点「使用配对码配对设备」，让那个对话框保持打开。\n4. 下拉通知栏，在开屏净的通知里输入 6 位配对码。</string>
+    <string name="pair_start">开始</string>
+    <string name="pair_reconnect">已配对过：重新执行</string>
+    <string name="pair_code_hint">6 位配对码</string>
+    <string name="pair_port_hint">对话框里的端口（自动找不到时才填）</string>
+    <string name="pair_submit">配对并授权</string>
+    <string name="pair_working">正在配对并授权…</string>
+    <string name="pair_error">失败：%1$s</string>
+    <string name="pair_done">授权完成</string>
+    <string name="pair_done_text">现在可以关掉无线调试了。</string>
+    <string name="pair_failed">授权失败</string>
+    <string name="pair_failed_text">打开开屏净查看原因。</string>
+    <string name="pair_failed_code">配对被拒绝，请确认配对码后再试。</string>
+    <string name="pair_failed_connect">已配对但连不上。保持无线调试开启，再点「已配对过：重新执行」。</string>
+    <string name="pair_grant_failed">权限没有授予成功。小米请开启「USB 调试（安全设置）」；OPPO／一加请开启「禁止权限监控」。</string>
+    <string name="pair_no_port">没找到配对对话框，请先点「使用配对码配对设备」。</string>
+    <string name="pair_timeout">等待配对对话框超时。</string>
+    <string name="pair_notify_searching">等待配对对话框</string>
+    <string name="pair_notify_searching_text">在「无线调试」里点「使用配对码配对设备」。</string>
+    <string name="pair_notify_found">已找到配对对话框</string>
+    <string name="pair_notify_found_text">输入对话框里显示的 6 位配对码。</string>
+    <string name="pair_enter_code">输入配对码</string>
+
+    <string name="guide_this_phone">这台手机：%1$s，Android %2$s</string>
+    <string name="guide_open_autostart">自启动设置</string>
+    <string name="guide_open_app_info">打开应用信息</string>
+    <string name="guide_general_title">所有手机都要做</string>
+    <string name="guide_general">• 在最近任务里锁定开屏净（下拉卡片或点锁形图标）。\n• 不要「强行停止」它，也不要用清理软件清掉：强行停止会让系统关掉无障碍服务。完成一次授权后，下次应用运行时会自动恢复。\n• 如果发现不跳了，打开一次开屏净即可。</string>
+    <string name="guide_restricted_title">开启服务时提示「受限制的设置」</string>
+    <string name="guide_restricted">Android 13 以上会限制从安装包装的应用使用无障碍。先试着开启一次（会出现提示），再到「应用信息」→ 右上角 ⋮ →「允许受限制的设置」，然后重新开启。完成一次授权就不用这一步。</string>
+    <string name="guide_xiaomi">设置 → 应用设置 → 应用管理 → 开屏净：\n• 自启动：开\n• 省电策略：无限制\n• 其他权限：允许「后台弹出界面」\n然后在最近任务里锁定。</string>
+    <string name="guide_huawei">设置 → 应用和服务 → 应用启动管理 → 开屏净：关闭「自动管理」，打开允许自启动、关联启动、后台活动。\n设置 → 电池 → 更多电池设置：打开「休眠时始终保持网络连接」。\n然后在最近任务里锁定。</string>
+    <string name="guide_oppo">设置 → 应用 → 应用管理 → 开屏净 → 耗电管理：允许完全后台行为、允许自启动、允许关联启动。\n然后在最近任务里锁定。</string>
+    <string name="guide_vivo">设置 → 电池 → 后台耗电管理 → 开屏净：允许后台高耗电。\ni管家 → 应用管理 → 权限管理 → 自启动：开。\n然后在最近任务里锁定。</string>
+    <string name="guide_samsung">设置 → 电池 → 后台使用限制 → 永不休眠的应用：加入开屏净。\n设置 → 应用 → 开屏净 → 电池：不受限制。</string>
+    <string name="guide_other">允许自启动、电池设为不限制，并在最近任务里锁定。</string>
+
+    <string name="exclude_hint">勾选的应用里开屏净完全不动作。开着无障碍就不让用的银行类应用可以勾在这里。</string>
+    <string name="exclude_builtin">固定不处理</string>
+
+    <string name="capture_need_service">请先开启开屏净的无障碍服务。</string>
+    <string name="capture_failed">抓取失败</string>
+    <string name="capture_done_title">已抓取画面</string>
+    <string name="capture_done_text">点这里标记跳过按钮</string>
+
+    <string name="teach_title">抓取记录</string>
+    <string name="teach_empty">还没有抓取记录。</string>
+    <string name="teach_load_failed">这条抓取记录打不开。</string>
+    <string name="teach_hint">点一下跳过（或关闭）按钮所在的位置。</string>
+    <string name="teach_no_selector">（没有 id 或文字）</string>
+    <string name="teach_use_position">每次都点这个位置</string>
+    <string name="teach_save">保存规则</string>
+    <string name="teach_saved">已保存，下次打开这个应用就会用上。</string>
+    <string name="teach_save_failed">保存失败：%1$s</string>
+
+    <string name="channel_status">运行状态</string>
+    <string name="channel_events">抓取与授权</string>
+    <string name="status_running">开屏净运行中</string>
+    <string name="status_today">今天已跳过 %1$d 次</string>
+</resources>

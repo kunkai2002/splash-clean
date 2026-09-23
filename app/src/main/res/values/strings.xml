@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SplashClean</string>
+    <string name="a11y_description">SplashClean taps the \"Skip\" button of splash-screen ads and closes pop-up ads and update prompts in the first seconds after an app opens. It reads the screen only to find those buttons; nothing leaves your phone.</string>
+    <string name="tile_capture">Capture ad</string>
+    <string name="back">Back</string>
+    <string name="search">Search</string>
+
+    <string name="tab_home">Home</string>
+    <string name="tab_rules">Rules</string>
+    <string name="tab_log">Log</string>
+    <string name="tab_settings">Settings</string>
+
+    <string name="action_add">Add</string>
+    <string name="action_allow">Allow</string>
+    <string name="action_authorize">Authorize</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_capture">Capture this screen</string>
+    <string name="action_copy">Copy</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_enable">Turn on</string>
+    <string name="action_update">Update</string>
+    <string name="action_view">View</string>
+
+    <string name="home_running">Ads are being skipped</string>
+    <string name="home_not_running">Not running yet</string>
+    <string name="home_paused">Paused</string>
+    <string name="home_rules_summary">App rules for %1$d installed apps · %2$d global rules</string>
+    <string name="home_today">Skipped today</string>
+    <string name="home_total">Skipped in total</string>
+    <string name="home_checklist">Setup</string>
+    <string name="home_recent">Recently skipped</string>
+    <string name="home_manage_rules">Manage rules</string>
+
+    <string name="check_a11y">Accessibility service</string>
+    <string name="check_a11y_desc">Needed to see and tap the skip button</string>
+    <string name="check_a11y_ok">On</string>
+    <string name="check_guard">Stay on for good</string>
+    <string name="check_guard_desc">One-time authorization so the service turns itself back on</string>
+    <string name="check_guard_ok">Authorized — the service repairs itself</string>
+    <string name="check_subs">Community rules</string>
+    <string name="check_subs_desc">Adds rules for about a thousand apps (downloaded from the authors)</string>
+    <string name="check_subs_ok">Subscribed</string>
+    <string name="check_battery">Battery: unrestricted</string>
+    <string name="check_battery_desc">Stops the system from killing the app in the background</string>
+    <string name="check_battery_ok">Unrestricted</string>
+    <string name="check_notify">Notifications</string>
+    <string name="check_notify_desc">Status notification and \"capture this screen\" button</string>
+    <string name="check_brand">Keep-alive settings for this phone</string>
+    <string name="check_brand_desc">Auto-start, background and recents lock, step by step</string>
+
+    <string name="toast_skipped">Ad skipped</string>
+    <string name="toast_enabled_by_guard">Service turned on</string>
+    <string name="toast_subs_added">Added: %1$s</string>
+    <string name="toast_subs_failed">Could not add the subscription: %1$s</string>
+    <string name="toast_updated">%1$d subscription(s) updated</string>
+    <string name="toast_copied">Copied</string>
+
+    <string name="log_title">Skip log</string>
+    <string name="log_empty">Nothing skipped yet. Open an app that shows a splash ad to try it.</string>
+    <string name="log_since_enter">%1$.1f s after opening</string>
+    <string name="log_ocr_group">Screen text \"%1$s\" (OCR)</string>
+
+    <string name="rules_title">Rules</string>
+    <string name="rules_active">Active now: rules for %1$d apps, %2$d global rules, %3$d rule groups</string>
+    <string name="rules_add_title">Add community rules</string>
+    <string name="rules_add_desc">These subscriptions use the GKD rule format and are maintained by their authors. They are downloaded from the authors\' own links, never bundled with this app.</string>
+    <string name="rules_add_url">Add by link</string>
+    <string name="rules_builtin_title">Built-in rules</string>
+    <string name="rules_builtin_desc">Generic splash-ad, update-prompt and youth-mode rules. When a community subscription provides its own global rule of the same kind, the built-in one steps aside.</string>
+    <string name="rules_mine_title">My rules</string>
+    <string name="rules_mine_empty">Rules you teach with \"Capture this screen\" show up here.</string>
+    <string name="rule_position">Tap at %1$.0f%%, %2$.0f%% of the screen</string>
+    <string name="subs_meta">v%1$d · %2$d apps · %3$d groups · updated %4$s</string>
+    <string name="subs_error">Last update failed: %1$s</string>
+    <string name="subs_categories">Categories</string>
+    <string name="kind_splash">Splash ad</string>
+    <string name="kind_popup">Pop-up</string>
+
+    <string name="set_skip_title">Skipping</string>
+    <string name="set_ocr">Read the screen when a button has no text</string>
+    <string name="set_ocr_desc">In the first seconds after opening an app, looks for \"Skip\" in a screenshot (PaddleOCR, on the phone)</string>
+    <string name="set_ocr_unsupported">Needs Android 11 or newer</string>
+    <string name="set_toast">Show a short message after skipping</string>
+    <string name="set_toast_desc">So you know it worked</string>
+    <string name="set_autoupdate">Update subscriptions automatically</string>
+    <string name="set_autoupdate_desc">At most every 12 hours, when the app starts</string>
+    <string name="set_exclude">Apps to leave alone</string>
+    <string name="set_exclude_desc">%1$d chosen by you (WeChat and system screens are always left alone)</string>
+    <string name="set_teach_title">Teach it a missed ad</string>
+    <string name="set_teach_desc">When an ad slips through: pull down the quick settings and tap \"Capture ad\" (or the button in the status notification) while the ad is on screen. Then open the capture, tap where the skip button was and save.</string>
+    <string name="set_teach_open">Open captures</string>
+    <string name="set_keep_title">Keep running</string>
+    <string name="set_notification">Status notification</string>
+    <string name="set_notification_desc">A silent notification keeps the app from being frozen</string>
+    <string name="set_guard">Turn the service back on automatically</string>
+    <string name="set_guard_desc_ok">Authorized</string>
+    <string name="set_guard_desc_no">Needs the one-time authorization below</string>
+    <string name="set_authorize_desc">Authorize once over wireless debugging or from a computer</string>
+    <string name="set_about_title">About</string>
+    <string name="about_text">SplashClean %1$s. Free and open source (GPL-3.0). No ads, no analytics, no account; nothing on your screen leaves the phone.</string>
+    <string name="about_source">Source code</string>
+    <string name="about_licenses">Built on: GKD selector engine and rule format (GPL-3.0, gkd-kit/gkd) · PaddleOCR PP-OCRv4 models (Apache-2.0) · ONNX Runtime (MIT) · libadb-android (GPL-3.0-or-later / Apache-2.0) · Conscrypt, Bouncy Castle.</string>
+
+    <string name="auth_status_ok">Authorized</string>
+    <string name="auth_status_no">Not authorized yet</string>
+    <string name="auth_what">After this one-time step the app can switch its accessibility service back on by itself (after a reboot, a cleaner, or a system hiccup) and skips the \"restricted setting\" prompt. The permission survives reboots and app updates; it is removed only when you uninstall the app.</string>
+    <string name="auth_pc_title">From a computer</string>
+    <string name="auth_pc_steps">Turn on USB debugging, connect the phone and run:</string>
+    <string name="auth_brand_title">Before you start</string>
+    <string name="auth_brand_notes">Xiaomi / Redmi: also turn on \"USB debugging (Security settings)\" (needs a SIM card and a Mi account).\nOPPO / OnePlus / realme: turn on \"Disable permission monitoring\" in Developer options.\nAll phones: Developer options are unlocked by tapping \"Build number\" 7 times in About phone.</string>
+    <string name="auth_open_dev">Open developer options</string>
+
+    <string name="pair_title">On the phone only (Android 11+)</string>
+    <string name="pair_unsupported">Android 10 and older cannot pair wirelessly; use the computer method.</string>
+    <string name="pair_steps">1. Tap Start: Developer options open.\n2. Turn on Wireless debugging (connect to any Wi-Fi first).\n3. Tap \"Pair device with pairing code\" and keep that dialog open.\n4. Type the 6-digit code into the notification from SplashClean (pull down the notification shade).</string>
+    <string name="pair_start">Start</string>
+    <string name="pair_reconnect">Already paired: run again</string>
+    <string name="pair_code_hint">6-digit pairing code</string>
+    <string name="pair_port_hint">Port shown in the dialog (only if not found automatically)</string>
+    <string name="pair_submit">Pair and authorize</string>
+    <string name="pair_working">Pairing and authorizing…</string>
+    <string name="pair_error">Failed: %1$s</string>
+    <string name="pair_done">Authorized</string>
+    <string name="pair_done_text">You can turn off Wireless debugging now.</string>
+    <string name="pair_failed">Authorization failed</string>
+    <string name="pair_failed_text">Open SplashClean to see why.</string>
+    <string name="pair_failed_code">Pairing was rejected. Check the code and try again.</string>
+    <string name="pair_failed_connect">Paired, but could not connect. Keep Wireless debugging on and tap \"Already paired: run again\".</string>
+    <string name="pair_grant_failed">The permission was not granted. On Xiaomi turn on \"USB debugging (Security settings)\"; on OPPO/OnePlus turn on \"Disable permission monitoring\".</string>
+    <string name="pair_no_port">The pairing dialog was not found. Open \"Pair device with pairing code\" first.</string>
+    <string name="pair_timeout">Timed out waiting for the pairing dialog.</string>
+    <string name="pair_notify_searching">Waiting for the pairing dialog</string>
+    <string name="pair_notify_searching_text">In Wireless debugging, tap \"Pair device with pairing code\".</string>
+    <string name="pair_notify_found">Pairing dialog found</string>
+    <string name="pair_notify_found_text">Enter the 6-digit code shown in the dialog.</string>
+    <string name="pair_enter_code">Enter code</string>
+
+    <string name="guide_this_phone">This phone: %1$s, Android %2$s</string>
+    <string name="guide_open_autostart">Auto-start settings</string>
+    <string name="guide_open_app_info">Open app info</string>
+    <string name="guide_general_title">On every phone</string>
+    <string name="guide_general">• Lock SplashClean in the recent-apps screen (pull down on its card or tap the lock icon).\n• Do not \"force stop\" it or clear it with a cleaner app: a force stop makes Android turn the accessibility service off. With the one-time authorization it comes back the next time the app runs.\n• If skipping stops, open SplashClean once.</string>
+    <string name="guide_restricted_title">\"Restricted setting\" when turning on the service</string>
+    <string name="guide_restricted">Android 13+ blocks accessibility for apps installed from a file. Try to turn the service on once (the warning appears), then open App info → ⋮ (top right) → Allow restricted settings, and turn it on again. The one-time authorization removes this step.</string>
+    <string name="guide_xiaomi">Settings → Apps → Manage apps → SplashClean:\n• Autostart: on\n• Battery saver: No restrictions\n• Other permissions: allow \"Display pop-up windows while running in the background\"\nThen lock the app in Recents.</string>
+    <string name="guide_huawei">Settings → Apps → App launch → SplashClean: turn off \"Manage automatically\", then allow Auto-launch, Secondary launch and Run in background.\nSettings → Battery → More battery settings: \"Stay connected when device is asleep\".\nThen lock the app in Recents.</string>
+    <string name="guide_oppo">Settings → Apps → App management → SplashClean → Battery usage: allow background activity, auto launch and launch by other apps.\nThen lock the app in Recents.</string>
+    <string name="guide_vivo">Settings → Battery → Background power consumption management → SplashClean: allow high background power consumption.\ni Manager → App manager → Permission manager → Autostart: on.\nThen lock the app in Recents.</string>
+    <string name="guide_samsung">Settings → Battery → Background usage limits → Never sleeping apps: add SplashClean.\nSettings → Apps → SplashClean → Battery: Unrestricted.</string>
+    <string name="guide_other">Allow auto-start, set battery usage to unrestricted, and lock the app in Recents.</string>
+
+    <string name="exclude_hint">SplashClean does nothing at all in checked apps. Use this for banking apps that refuse to run while an accessibility service is on.</string>
+    <string name="exclude_builtin">Always left alone</string>
+
+    <string name="capture_need_service">Turn on the SplashClean accessibility service first.</string>
+    <string name="capture_failed">Capture failed</string>
+    <string name="capture_done_title">Screen captured</string>
+    <string name="capture_done_text">Tap to mark the skip button</string>
+
+    <string name="teach_title">Captured screens</string>
+    <string name="teach_empty">No captures yet.</string>
+    <string name="teach_load_failed">This capture could not be opened.</string>
+    <string name="teach_hint">Tap where the skip (or close) button is.</string>
+    <string name="teach_no_selector">(no id or text)</string>
+    <string name="teach_use_position">Tap this position every time</string>
+    <string name="teach_save">Save rule</string>
+    <string name="teach_saved">Saved. It will be used the next time this app opens.</string>
+    <string name="teach_save_failed">Could not save: %1$s</string>
+
+    <string name="channel_status">Status</string>
+    <string name="channel_events">Captures and authorization</string>
+    <string name="status_running">SplashClean is running</string>
+    <string name="status_today">%1$d ads skipped today</string>
+</resources>

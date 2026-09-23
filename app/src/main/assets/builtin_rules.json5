@@ -1,0 +1,105 @@
+// SplashClean built-in rules (GKD subscription format, https://gkd.li/api/).
+// Written for this project. They are a fallback: when an enabled community subscription
+// has a global group with the same prefix (e.g. "开屏广告-…"), the built-in group is skipped.
+{
+  id: -1,
+  name: '开屏净内置规则',
+  version: 1,
+  author: 'SplashClean',
+  categories: [
+    { key: 0, name: '开屏广告', enable: true },
+    { key: 1, name: '更新提示', enable: true },
+    { key: 2, name: '青少年模式', enable: true },
+  ],
+  globalGroups: [
+    {
+      key: 0,
+      name: '开屏广告-内置',
+      desc: '打开应用后 10 秒内点击“跳过”',
+      order: -10,
+      fastQuery: true,
+      matchTime: 10000,
+      actionMaximum: 2,
+      resetMatch: 'app',
+      forcedTime: 10000,
+      priorityTime: 10000,
+      actionCdKey: 0,
+      actionMaximumKey: 0,
+      disableIfAppGroupMatch: '开屏广告',
+      rules: [
+        {
+          key: 0,
+          excludeMatches: [
+            '[text*="搜索" || text*="设置" || text*="設定" || text*="跳过片" || text*="跳過片" || text*="跳过此" || text*="跳过本" || text*="跳过该" || text*="阅读并同意" || text*="同意并" || text^="下一步" || text="完成" || text="历史记录"][text.length<14][visibleToUser=true]',
+          ],
+          anyMatches: [
+            // Skip buttons of common ad SDKs (resource ids are merged into the host app's package)
+            '[vid="tt_splash_skip_btn"][visibleToUser=true]',
+            '[vid="ksad_splash_skip_view"][visibleToUser=true]',
+            '[vid="ksad_skip_view"][visibleToUser=true]',
+            '[vid="jad_splash_skip_btn"][visibleToUser=true]',
+            '[vid="jad_skip_btn"][visibleToUser=true]',
+            '[vid="beizi_skip_ad"][visibleToUser=true]',
+            '[vid="tme_ad_skip_button"][visibleToUser=true]',
+            '[vid="gdt_count_down_view"][visibleToUser=true]',
+            '[vid="splash_skip"][visibleToUser=true]',
+            '[vid="splash_skip_btn"][visibleToUser=true]',
+            '[vid="skip_btn"][visibleToUser=true]',
+            '[vid="btn_skip"][visibleToUser=true]',
+            '[vid="skip_button"][visibleToUser=true]',
+            '[vid="ad_skip"][visibleToUser=true]',
+            '[vid="ad_skip_btn"][visibleToUser=true]',
+            // Short labels containing "skip"
+            '[text*="跳过"][text.length<10][width<500 && height<300][visibleToUser=true]',
+            '[text*="跳過"][text.length<10][width<500 && height<300][visibleToUser=true]',
+            '[text*="Skip"][text.length<12][width<500 && height<300][visibleToUser=true]',
+            '[text*="SKIP"][text.length<12][width<500 && height<300][visibleToUser=true]',
+            '[text*="skip"][text.length<12][width<500 && height<300][visibleToUser=true]',
+            '[desc*="跳过"][desc.length<10][width<500 && height<300][visibleToUser=true]',
+            '[desc*="跳過"][desc.length<10][width<500 && height<300][visibleToUser=true]',
+            // Unknown ids that look like a skip button
+            '[childCount=0][vid~="(?i).*skip.*"][vid!~="(?i).*(video|head|tail|intro|guide|music|song).*"][width<500 && height<300][visibleToUser=true]',
+          ],
+        },
+      ],
+    },
+    {
+      key: 1,
+      name: '更新提示-内置',
+      desc: '关闭“发现新版本”弹窗',
+      fastQuery: true,
+      matchTime: 20000,
+      actionMaximum: 1,
+      resetMatch: 'app',
+      disableIfAppGroupMatch: '更新提示',
+      rules: [
+        {
+          key: 0,
+          matches: [
+            '[text*="新版本" || text*="版本更新" || text*="发现新版" || text*="發現新版" || text*="更新提示" || text*="升级提示" || text*="升級提示" || text*="新版上线"][text.length<30][visibleToUser=true]',
+            '[text="以后再说" || text="稍后再说" || text="下次再说" || text="暂不更新" || text="暂不升级" || text="稍后更新" || text="以后再说吧" || text="下次吧" || text="忽略" || text="忽略此版本" || text="残忍拒绝" || text="以後再說" || text="稍後再說" || text="下次再說" || text="暫不更新" || text="暫不升級"][visibleToUser=true]',
+          ],
+        },
+      ],
+    },
+    {
+      key: 2,
+      name: '青少年模式-内置',
+      desc: '关闭“青少年模式”提示',
+      fastQuery: true,
+      matchTime: 20000,
+      actionMaximum: 1,
+      resetMatch: 'app',
+      disableIfAppGroupMatch: '青少年模式',
+      rules: [
+        {
+          key: 0,
+          matches: [
+            '[text*="青少年模式" || text*="未成年人模式" || text*="青少年守护"][visibleToUser=true]',
+            '[text="我知道了" || text="知道了" || text="我已知晓" || text="我知道啦"][visibleToUser=true]',
+          ],
+        },
+      ],
+    },
+  ],
+}
