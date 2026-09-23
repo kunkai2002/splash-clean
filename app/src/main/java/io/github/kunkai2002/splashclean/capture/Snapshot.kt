@@ -120,23 +120,37 @@ object SnapshotTaker {
             callback(r)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            service.takeScreenshot(Display.DEFAULT_DISPLAY, io, object : AccessibilityService.TakeScreenshotCallback {
-                override fun onSuccess(result: AccessibilityService.ScreenshotResult) {
-                    val hw = result.hardwareBuffer
-                    val bmp = try {
-                        Bitmap.wrapHardwareBuffer(hw, result.colorSpace)?.copy(Bitmap.Config.ARGB_8888, false)
-                    } finally {
-                        hw.close()
-                    }
-                    save(bmp)
-                }
-
-                override fun onFailure(errorCode: Int) = save(null)
-            })
+            screenshot(service, attempt = 0) { save(it) }
         } else {
             save(null)
         }
     }
+
+    /** Retries when the OCR fallback has just taken a screenshot (Android allows ~3 per second). */
+    @androidx.annotation.RequiresApi(Build.VERSION_CODES.R)
+    private fun screenshot(service: CleanAccessibilityService, attempt: Int, done: (Bitmap?) -> Unit) {
+        service.takeScreenshot(Display.DEFAULT_DISPLAY, io, object : AccessibilityService.TakeScreenshotCallback {
+            override fun onSuccess(result: AccessibilityService.ScreenshotResult) {
+                val hw = result.hardwareBuffer
+                val bmp = try {
+                    Bitmap.wrapHardwareBuffer(hw, result.colorSpace)?.copy(Bitmap.Config.ARGB_8888, false)
+                } finally {
+                    hw.close()
+                }
+                done(bmp)
+            }
+
+            override fun onFailure(errorCode: Int) {
+                if (attempt < 4) {
+                    retryHandler.postDelayed({ screenshot(service, attempt + 1, done) }, 400)
+                } else {
+                    done(null)
+                }
+            }
+        })
+    }
+
+    private val retryHandler = Handler(Looper.getMainLooper())
 
     private fun dump(root: AccessibilityNodeInfo): List<SnapNode> {
         val out = ArrayList<SnapNode>()
@@ -201,6 +215,8 @@ object CaptureFlow {
             .setContentTitle(context.getString(R.string.capture_done_title))
             .setContentText(context.getString(R.string.capture_done_text))
             .setAutoCancel(true)
+            .setGroup("capture")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pi)
             .build()
         runCatching { context.getSystemService(NotificationManager::class.java).notify(Notifications.ID_CAPTURE, n) }

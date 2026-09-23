@@ -33,6 +33,8 @@ class RulesParseTest {
         groups.forEach { g -> assertEquals(g.errorDesc, null, g.errorDesc) }
         assertTrue(groups[0].name.startsWith("开屏广告"))
         assertTrue(groups[1].name.startsWith("全屏广告"))
+        // Taught rules must not disable the global splash rule for the whole app.
+        assertTrue(groups.all { it.ignoreGlobalGroupMatch == true })
     }
 
     @Test

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Debug builds only: lets `adb shell am broadcast -n <pkg>/io.github.kunkai2002.splashclean.capture.CaptureTrigger`
+     start the same capture flow as the notification button (used by the emulator tests). -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <application>
+        <receiver
+            android:name=".capture.CaptureTrigger"
+            android:exported="true"
+            tools:replace="android:exported" />
+    </application>
+</manifest>

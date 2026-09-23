@@ -101,6 +101,7 @@ class DnsVpnService : VpnService() {
             .setSmallIcon(R.drawable.ic_stat)
             .setContentTitle(getString(R.string.dns_notification))
             .setOngoing(true)
+            .setGroup("dns")
             .setPriority(NotificationCompat.PRIORITY_MIN)
             .setContentIntent(Notifications.openApp(this))
             .addAction(0, getString(R.string.dns_stop), stop)

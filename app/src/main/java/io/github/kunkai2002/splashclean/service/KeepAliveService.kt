@@ -128,6 +128,8 @@ class KeepAliveService : Service() {
             .setContentText(getString(R.string.status_today, today))
             .setOngoing(true)
             .setShowWhen(false)
+            // Own group so Android does not fold it (and its capture button) under other notifications.
+            .setGroup("status")
             .setPriority(NotificationCompat.PRIORITY_MIN)
             .setContentIntent(Notifications.openApp(this))
             .addAction(0, getString(R.string.action_capture), capture)

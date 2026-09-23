@@ -171,6 +171,24 @@ class UpdateScene : Scene() {
     }
 }
 
+/** Close button is an unlabeled icon with an app-specific id: nothing built in can find it; the user must teach it. */
+class CustomScene : Scene() {
+    override val scene = "custom"
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val root = adBackground(this)
+        val close = View(this).apply {
+            id = R.id.close_x
+            setBackgroundColor(Color.argb(160, 0, 0, 0))
+            isClickable = true
+            setOnClickListener { skipped() }
+        }
+        root.addView(close, FrameLayout.LayoutParams(44.dp(), 44.dp(), Gravity.TOP or Gravity.END).apply { setMargins(0, 48.dp(), 16.dp(), 0) })
+        setContentView(root)
+        autoClose(15000)
+    }
+}
+
 /** Counts accelerometer events per second, like a "shake to open" splash ad would listen. */
 class ShakeScene : Scene() {
     override val scene = "shake"

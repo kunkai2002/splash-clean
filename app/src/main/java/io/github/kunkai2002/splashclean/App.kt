@@ -20,6 +20,7 @@ class App : Application() {
         Prefs.init(this)
         ActionLog.init(this)
         Notifications.ensureChannels(this)
+        io.github.kunkai2002.splashclean.capture.UserRules.regenerate(this)
         RuleRepository.init(this)
         A11yGuard.ensureEnabled(this, "app start")
         GuardJob.schedule(this)

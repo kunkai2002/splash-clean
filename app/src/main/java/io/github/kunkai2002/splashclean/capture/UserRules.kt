@@ -38,6 +38,13 @@ object UserRules {
 
     fun add(context: Context, rule: UserRule): Result<Unit> = save(context, load(context) + rule)
 
+    /** Rewrites the generated subscription from the saved list (picks up format changes after an update). */
+    fun regenerate(context: Context) {
+        val rules = load(context)
+        if (rules.isEmpty()) return
+        runCatching { File(context.filesDir, "user_rules.json5").writeText(toSubscription(rules)) }
+    }
+
     fun remove(context: Context, id: Long): Result<Unit> = save(context, load(context).filter { it.id != id })
 
     private fun save(context: Context, rules: List<UserRule>): Result<Unit> {
@@ -71,7 +78,7 @@ object UserRules {
                                 add(buildJsonObject {
                                     put("key", i)
                                     val splash = r.kind == "splash"
-                                    put("name", (if (splash) "开屏广告" else "全屏广告") + "-" + r.label.ifBlank { "#${r.id}" })
+                                    put("name", (if (splash) "开屏广告" else "全屏广告") + "-" + r.label.ifBlank { "自定义${i + 1}" })
                                     if (splash) {
                                         put("matchTime", 10000)
                                         put("actionMaximum", 1)
@@ -79,6 +86,8 @@ object UserRules {
                                         put("forcedTime", 10000)
                                     }
                                     put("fastQuery", r.fastQuery)
+                                    // A taught rule adds to the generic splash rule instead of switching it off for this app.
+                                    put("ignoreGlobalGroupMatch", true)
                                     r.activityId?.let { a -> putJsonArray("activityIds") { add(JsonPrimitive(a)) } }
                                     putJsonArray("rules") {
                                         add(buildJsonObject {
