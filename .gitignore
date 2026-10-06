@@ -9,3 +9,4 @@ local.properties
 signing.properties
 captures/
 .DS_Store
+dist/
