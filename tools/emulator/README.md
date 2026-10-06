@@ -30,3 +30,10 @@ bash tools/emulator/scenes.sh            # 全部情境；也可指定：scenes.
 - debug 版可用 `adb shell am broadcast -n $P/io.github.kunkai2002.splashclean.capture.CaptureTrigger` 觸發「抓取畫面」（與通知按鈕同一條流程）。
 - Git Bash 下 `adb shell` 的 `/sdcard/...` 路徑要先 `export MSYS_NO_PATHCONV=1`。
 - `uinodes.py <ui.xml> [文字]`：列出 uiautomator dump 裡的文字與座標；`taptext.sh` 提供 `tapText "<完整文字>"`（需先設 `SP` 為放 ui.xml 的資料夾）。
+
+模擬器與系統映像不隨工具鏈保留（約 10 GB）。需要時重裝：
+
+```
+sdkmanager emulator system-images/android-35/google_apis/x86_64
+echo no | avdmanager create avd -n sc35 -k "system-images;android-35;google_apis;x86_64" -d pixel_6
+```
