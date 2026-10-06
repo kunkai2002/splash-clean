@@ -44,6 +44,13 @@
     <string name="check_battery">Battery: unrestricted</string>
     <string name="check_battery_desc">Stops the system from killing the app in the background</string>
     <string name="check_battery_ok">Unrestricted</string>
+    <string name="check_apps">App list permission</string>
+    <string name="check_apps_desc">This phone hides the app list behind a permission; without it some per-app rules and the app picker are incomplete</string>
+    <string name="lang_title">Language</string>
+    <string name="lang_system">Follow the system</string>
+    <string name="lang_hans" translatable="false">简体中文</string>
+    <string name="lang_hant" translatable="false">繁體中文</string>
+    <string name="lang_en" translatable="false">English</string>
     <string name="check_notify">Notifications</string>
     <string name="check_notify_desc">Status notification and \"capture this screen\" button</string>
     <string name="check_brand">Keep-alive settings for this phone</string>

@@ -99,6 +99,7 @@ fun SettingsScreen(modifier: Modifier, open: (String) -> Unit) {
                 SettingLink(stringResource(R.string.check_brand), stringResource(R.string.check_brand_desc)) { open(Pages.GUIDE) }
             }
         }
+        item { LanguageSection() }
         item {
             SectionCard(stringResource(R.string.set_about_title)) {
                 Text(stringResource(R.string.about_text, BuildConfig.VERSION_NAME), style = MaterialTheme.typography.bodySmall)

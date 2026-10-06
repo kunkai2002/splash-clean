@@ -44,6 +44,10 @@
     <string name="check_battery">电池：不限制</string>
     <string name="check_battery_desc">避免系统在后台杀掉本应用</string>
     <string name="check_battery_ok">已设为不限制</string>
+    <string name="check_apps">应用列表权限</string>
+    <string name="check_apps_desc">这台手机把「获取应用列表」设成了权限；没给的话部分应用专属规则和应用清单会不完整</string>
+    <string name="lang_title">语言</string>
+    <string name="lang_system">跟随系统</string>
     <string name="check_notify">通知</string>
     <string name="check_notify_desc">状态通知和「抓取当前画面」按钮要用</string>
     <string name="check_brand">本机保活设置</string>

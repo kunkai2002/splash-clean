@@ -29,7 +29,10 @@ import androidx.compose.ui.unit.dp
 import io.github.kunkai2002.splashclean.Pages
 import io.github.kunkai2002.splashclean.R
 import io.github.kunkai2002.splashclean.adb.ShakeBlocker
+import io.github.kunkai2002.splashclean.data.AppLocale
 import io.github.kunkai2002.splashclean.data.Prefs
+import io.github.kunkai2002.splashclean.service.KeepAliveService
+import io.github.kunkai2002.splashclean.service.Notifications
 import io.github.kunkai2002.splashclean.service.A11yGuard
 import io.github.kunkai2002.splashclean.vpn.Blocklist
 import io.github.kunkai2002.splashclean.vpn.DnsVpnService
@@ -102,6 +105,46 @@ fun DnsSection() {
                     }
                 }
             }) { Text(stringResource(R.string.dns_update)) }
+        }
+    }
+}
+
+private fun android.content.Context.findActivity(): Activity? {
+    var c: android.content.Context = this
+    while (c is android.content.ContextWrapper) {
+        if (c is Activity) return c
+        c = c.baseContext
+    }
+    return null
+}
+
+@Composable
+fun LanguageSection() {
+    val context = LocalContext.current
+    var current by remember { mutableStateOf(AppLocale.currentTag(context)) }
+    fun selected(tag: String) = when (tag) {
+        "" -> current.isEmpty()
+        "zh-TW" -> current == "zh-TW" || current.startsWith("zh-HK") || current.startsWith("zh-MO") || current.startsWith("zh-Hant")
+        "zh-CN" -> current == "zh-CN" || current.startsWith("zh-Hans") || current.startsWith("zh-SG")
+        else -> current.startsWith(tag)
+    }
+    SectionCard(stringResource(R.string.lang_title)) {
+        AppLocale.options.forEach { (tag, label) ->
+            Row(
+                Modifier.fillMaxWidth().clickable {
+                    val activity = context.findActivity() ?: return@clickable
+                    if (selected(tag)) return@clickable
+                    current = tag
+                    AppLocale.set(activity, tag)
+                    val app = context.applicationContext
+                    Notifications.ensureChannels(app)
+                    KeepAliveService.sync(app)
+                }.padding(vertical = 2.dp),
+                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+            ) {
+                androidx.compose.material3.RadioButton(selected = selected(tag), onClick = null)
+                Text(stringResource(label), modifier = Modifier.padding(start = 8.dp))
+            }
         }
     }
 }

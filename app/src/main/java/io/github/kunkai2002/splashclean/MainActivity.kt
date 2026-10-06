@@ -34,6 +34,13 @@ import io.github.kunkai2002.splashclean.ui.SettingsScreen
 import io.github.kunkai2002.splashclean.ui.SplashCleanTheme
 
 class MainActivity : ComponentActivity() {
+    override fun attachBaseContext(newBase: android.content.Context) {
+        // Android 13+ applies the per-app language itself; older versions use the in-app setting.
+        super.attachBaseContext(
+            if (android.os.Build.VERSION.SDK_INT < 33) io.github.kunkai2002.splashclean.data.AppLocale.wrap(newBase) else newBase
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

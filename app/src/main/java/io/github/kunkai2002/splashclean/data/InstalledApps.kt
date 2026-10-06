@@ -71,6 +71,18 @@ object InstalledApps {
     /** True when the package list looks complete (some ROMs hide it behind a runtime permission). */
     val listLooksComplete: Boolean get() = apps.size > 30
 
+    /** "Get installed apps" runtime permission used by MIUI/HyperOS, ColorOS, OriginOS and others. */
+    const val PERM_INSTALLED_APPS = "com.android.permission.GET_INSTALLED_APPS"
+
+    fun appListPermissionDefined(context: Context): Boolean =
+        runCatching { context.packageManager.getPermissionInfo(PERM_INSTALLED_APPS, 0) }.isSuccess
+
+    /** The ROM gates the app list and we do not have it (or the list came back suspiciously short). */
+    fun appListMissing(context: Context): Boolean =
+        (appListPermissionDefined(context) &&
+            context.checkSelfPermission(PERM_INSTALLED_APPS) != PackageManager.PERMISSION_GRANTED) ||
+            (apps.isNotEmpty() && !listLooksComplete)
+
     fun isBlocked(appId: String, settings: io.github.kunkai2002.splashclean.data.Settings): Boolean =
         appId in builtinBlocked || appId == imeAppId || appId in settings.disabledApps
 

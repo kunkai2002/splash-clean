@@ -1,5 +1,6 @@
 package io.github.kunkai2002.splashclean.adb
 
+import io.github.kunkai2002.splashclean.data.l10n
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
@@ -117,7 +118,7 @@ object AdbAuthorizer {
             delay(5 * 60_000L)
             if (_state.value is AuthState.WaitingForPairingDialog || _state.value is AuthState.WaitingForCode) {
                 stopDiscovery()
-                _state.value = AuthState.Failed(app.getString(R.string.pair_timeout))
+                _state.value = AuthState.Failed(app.l10n().getString(R.string.pair_timeout))
             }
         }
     }
@@ -141,7 +142,7 @@ object AdbAuthorizer {
             manualPort != null -> "127.0.0.1" to manualPort
             s is AuthState.WaitingForCode -> s.host to s.port
             else -> {
-                _state.value = AuthState.Failed(app.getString(R.string.pair_no_port))
+                _state.value = AuthState.Failed(app.l10n().getString(R.string.pair_no_port))
                 return
             }
         }
@@ -150,7 +151,7 @@ object AdbAuthorizer {
         scope.launch {
             val result = runCatching {
                 val m = SelfAdbManager.get(app)
-                check(m.pair(host, port, code.trim())) { app.getString(R.string.pair_failed_code) }
+                check(m.pair(host, port, code.trim())) { app.l10n().getString(R.string.pair_failed_code) }
                 grant(app, m)
             }
             _state.value = result.fold({ AuthState.Done(it) }, { AuthState.Failed(it.message ?: it.javaClass.simpleName) })
@@ -173,7 +174,7 @@ object AdbAuthorizer {
 
     private suspend fun grant(context: Context, m: SelfAdbManager): String = withContext(Dispatchers.IO) {
         if (!m.isConnected) {
-            check(m.autoConnect(context, 15_000)) { context.getString(R.string.pair_failed_connect) }
+            check(m.autoConnect(context, 15_000)) { context.l10n().getString(R.string.pair_failed_connect) }
         }
         val pkg = context.packageName
         val commands = buildList {
@@ -190,7 +191,7 @@ object AdbAuthorizer {
             log.append("$ ").append(cmd).append('\n').append(out.trim()).append('\n')
         }
         runCatching { m.disconnect() }
-        check(A11yGuard.hasWriteSecureSettings(context)) { log.toString() + "\n" + context.getString(R.string.pair_grant_failed) }
+        check(A11yGuard.hasWriteSecureSettings(context)) { log.toString() + "\n" + context.l10n().getString(R.string.pair_grant_failed) }
         A11yGuard.ensureEnabled(context, "adb grant")
         if (Prefs.value.shakeBlockApps.isNotEmpty()) ShakeBlocker.apply(context)
         log.toString()
@@ -231,18 +232,18 @@ object AdbAuthorizer {
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setContentIntent(Notifications.openApp(context))
         if (port == null) {
-            b.setContentTitle(context.getString(R.string.pair_notify_searching))
-                .setContentText(context.getString(R.string.pair_notify_searching_text))
+            b.setContentTitle(context.l10n().getString(R.string.pair_notify_searching))
+                .setContentText(context.l10n().getString(R.string.pair_notify_searching_text))
         } else {
-            val input = RemoteInput.Builder(KEY_CODE).setLabel(context.getString(R.string.pair_code_hint)).build()
+            val input = RemoteInput.Builder(KEY_CODE).setLabel(context.l10n().getString(R.string.pair_code_hint)).build()
             val pi = PendingIntent.getBroadcast(
                 context, 7, Intent(context, PairingCodeReceiver::class.java),
                 PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
             )
-            val action = NotificationCompat.Action.Builder(0, context.getString(R.string.pair_enter_code), pi)
+            val action = NotificationCompat.Action.Builder(0, context.l10n().getString(R.string.pair_enter_code), pi)
                 .addRemoteInput(input).build()
-            b.setContentTitle(context.getString(R.string.pair_notify_found))
-                .setContentText(context.getString(R.string.pair_notify_found_text))
+            b.setContentTitle(context.l10n().getString(R.string.pair_notify_found))
+                .setContentText(context.l10n().getString(R.string.pair_notify_found_text))
                 .addAction(action)
         }
         runCatching { nm.notify(Notifications.ID_PAIRING, b.build()) }
@@ -252,8 +253,8 @@ object AdbAuthorizer {
         val nm = context.getSystemService(NotificationManager::class.java)
         val n = NotificationCompat.Builder(context, Notifications.CHANNEL_EVENTS)
             .setSmallIcon(R.drawable.ic_stat)
-            .setContentTitle(context.getString(if (ok) R.string.pair_done else R.string.pair_failed))
-            .setContentText(context.getString(if (ok) R.string.pair_done_text else R.string.pair_failed_text))
+            .setContentTitle(context.l10n().getString(if (ok) R.string.pair_done else R.string.pair_failed))
+            .setContentText(context.l10n().getString(if (ok) R.string.pair_done_text else R.string.pair_failed_text))
             .setAutoCancel(true)
             .setContentIntent(Notifications.openApp(context))
             .build()

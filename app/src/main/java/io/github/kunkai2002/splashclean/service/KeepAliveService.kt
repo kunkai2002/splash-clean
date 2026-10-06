@@ -1,5 +1,6 @@
 package io.github.kunkai2002.splashclean.service
 
+import io.github.kunkai2002.splashclean.data.l10n
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -45,10 +46,10 @@ object Notifications {
         if (Build.VERSION.SDK_INT < 26) return
         val nm = context.getSystemService(NotificationManager::class.java)
         nm.createNotificationChannel(
-            NotificationChannel(CHANNEL_STATUS, context.getString(R.string.channel_status), NotificationManager.IMPORTANCE_MIN)
+            NotificationChannel(CHANNEL_STATUS, context.l10n().getString(R.string.channel_status), NotificationManager.IMPORTANCE_MIN)
         )
         nm.createNotificationChannel(
-            NotificationChannel(CHANNEL_EVENTS, context.getString(R.string.channel_events), NotificationManager.IMPORTANCE_HIGH)
+            NotificationChannel(CHANNEL_EVENTS, context.l10n().getString(R.string.channel_events), NotificationManager.IMPORTANCE_HIGH)
         )
     }
 
@@ -110,7 +111,14 @@ class KeepAliveService : Service() {
             .onFailure { stopSelf() }
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int = START_STICKY
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // Re-post so a language change shows up right away.
+        runCatching {
+            getSystemService(NotificationManager::class.java)
+                .notify(Notifications.ID_STATUS, buildNotification(ActionLog.todayCount()))
+        }
+        return START_STICKY
+    }
 
     override fun onDestroy() {
         scope.cancel()
@@ -124,15 +132,15 @@ class KeepAliveService : Service() {
         )
         return NotificationCompat.Builder(this, Notifications.CHANNEL_STATUS)
             .setSmallIcon(R.drawable.ic_stat)
-            .setContentTitle(getString(R.string.status_running))
-            .setContentText(getString(R.string.status_today, today))
+            .setContentTitle(l10n().getString(R.string.status_running))
+            .setContentText(l10n().getString(R.string.status_today, today))
             .setOngoing(true)
             .setShowWhen(false)
             // Own group so Android does not fold it (and its capture button) under other notifications.
             .setGroup("status")
             .setPriority(NotificationCompat.PRIORITY_MIN)
             .setContentIntent(Notifications.openApp(this))
-            .addAction(0, getString(R.string.action_capture), capture)
+            .addAction(0, l10n().getString(R.string.action_capture), capture)
             .build()
     }
 }

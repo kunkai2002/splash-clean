@@ -60,6 +60,12 @@ import java.io.File
 
 /** "Teach it": pick a captured screen, tap the skip button, save a rule. */
 class TeachActivity : ComponentActivity() {
+    override fun attachBaseContext(newBase: android.content.Context) {
+        super.attachBaseContext(
+            if (android.os.Build.VERSION.SDK_INT < 33) io.github.kunkai2002.splashclean.data.AppLocale.wrap(newBase) else newBase
+        )
+    }
+
     companion object {
         const val EXTRA_PATH = "path"
     }

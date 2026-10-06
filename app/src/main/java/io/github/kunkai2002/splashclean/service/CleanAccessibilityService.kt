@@ -1,5 +1,6 @@
 package io.github.kunkai2002.splashclean.service
 
+import io.github.kunkai2002.splashclean.data.l10n
 import android.accessibilityservice.AccessibilityService
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -178,7 +179,7 @@ class CleanAccessibilityService : AccessibilityService(), EngineHost {
 
     private fun showActionToast() {
         if (!Prefs.value.showToast) return
-        mainHandler.post { Toast.makeText(this, R.string.toast_skipped, Toast.LENGTH_SHORT).show() }
+        mainHandler.post { Toast.makeText(this, l10n().getString(R.string.toast_skipped), Toast.LENGTH_SHORT).show() }
     }
 
     fun refreshApps() {

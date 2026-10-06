@@ -44,6 +44,8 @@ data class Settings(
     val shakeLastApply: Long = 0,
     val shakeLastError: String? = null,
     val onboardingDone: Boolean = false,
+    /** Android 12 and older only ("" = follow the system); Android 13+ uses the system per-app language. */
+    val language: String = "",
     val guardAccessibility: Boolean = true,
 )
 

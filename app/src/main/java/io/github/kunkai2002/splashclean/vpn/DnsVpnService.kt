@@ -1,5 +1,6 @@
 package io.github.kunkai2002.splashclean.vpn
 
+import io.github.kunkai2002.splashclean.data.l10n
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
@@ -99,12 +100,12 @@ class DnsVpnService : VpnService() {
         )
         return NotificationCompat.Builder(this, Notifications.CHANNEL_STATUS)
             .setSmallIcon(R.drawable.ic_stat)
-            .setContentTitle(getString(R.string.dns_notification))
+            .setContentTitle(l10n().getString(R.string.dns_notification))
             .setOngoing(true)
             .setGroup("dns")
             .setPriority(NotificationCompat.PRIORITY_MIN)
             .setContentIntent(Notifications.openApp(this))
-            .addAction(0, getString(R.string.dns_stop), stop)
+            .addAction(0, l10n().getString(R.string.dns_stop), stop)
             .build()
     }
 
@@ -146,7 +147,7 @@ class DnsVpnService : VpnService() {
         val list = runCatching { Blocklist.load(this) }.getOrElse { Blocklist(emptySet(), emptyList()) }
         val allow = Prefs.value.dnsAllowlist
         val builder = Builder()
-            .setSession(getString(R.string.app_name))
+            .setSession(l10n().getString(R.string.app_name))
             .setMtu(1500)
             .addAddress(ADDR4, 32)
             .addRoute(DNS4, 32)

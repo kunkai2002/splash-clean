@@ -79,6 +79,11 @@ fun HomeScreen(modifier: Modifier, open: (String) -> Unit, goRules: () -> Unit) 
         tick++
         KeepAliveService.sync(context)
     }
+    val appsMissing = remember(tick) { InstalledApps.appListMissing(context) }
+    val appsLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        if (granted) RuleRepository.refreshInstalledApps() else SystemIntents.openAppDetails(context)
+        tick++
+    }
     val today = if (counters.day == formatTime(System.currentTimeMillis(), "yyyyMMdd")) counters.today else 0
 
     LazyColumn(modifier.fillMaxSize()) {
@@ -156,6 +161,20 @@ fun HomeScreen(modifier: Modifier, open: (String) -> Unit, goRules: () -> Unit) 
                     desc = stringResource(if (battery) R.string.check_battery_ok else R.string.check_battery_desc),
                     action = if (battery) null else stringResource(R.string.action_allow),
                 ) { SystemIntents.requestIgnoreBatteryOptimizations(context) }
+                if (appsMissing) {
+                    CheckRow(
+                        ok = false,
+                        title = stringResource(R.string.check_apps),
+                        desc = stringResource(R.string.check_apps_desc),
+                        action = stringResource(R.string.action_allow),
+                    ) {
+                        if (InstalledApps.appListPermissionDefined(context)) {
+                            appsLauncher.launch(InstalledApps.PERM_INSTALLED_APPS)
+                        } else {
+                            SystemIntents.openAppDetails(context)
+                        }
+                    }
+                }
                 if (!notifyOk) {
                     CheckRow(
                         ok = false,

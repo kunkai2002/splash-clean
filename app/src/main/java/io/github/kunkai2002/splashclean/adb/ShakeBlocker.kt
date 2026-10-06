@@ -1,5 +1,6 @@
 package io.github.kunkai2002.splashclean.adb
 
+import io.github.kunkai2002.splashclean.data.l10n
 import android.app.job.JobInfo
 import android.app.job.JobParameters
 import android.app.job.JobScheduler
@@ -46,12 +47,12 @@ object ShakeBlocker {
             val wasOn = AdbAuthorizer.isWirelessDebuggingOn(context)
             val result = runCatching {
                 if (!wasOn) {
-                    check(A11yGuard.hasWriteSecureSettings(context)) { context.getString(R.string.shake_need_auth) }
+                    check(A11yGuard.hasWriteSecureSettings(context)) { context.l10n().getString(R.string.shake_need_auth) }
                     Settings.Global.putInt(resolver, ADB_WIFI, 1)
                     delay(3000)
                 }
                 val m = SelfAdbManager.get(context)
-                if (!m.isConnected) check(m.autoConnect(context, 15_000)) { context.getString(R.string.shake_need_wifi) }
+                if (!m.isConnected) check(m.autoConnect(context, 15_000)) { context.l10n().getString(R.string.shake_need_wifi) }
                 val log = StringBuilder()
                 want.forEach { log.append(AdbAuthorizer.shell(m, "cmd sensorservice set-uid-state $it idle")) }
                 (before - want).forEach { log.append(AdbAuthorizer.shell(m, "cmd sensorservice reset-uid-state $it")) }

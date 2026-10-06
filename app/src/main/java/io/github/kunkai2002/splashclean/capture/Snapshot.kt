@@ -1,5 +1,6 @@
 package io.github.kunkai2002.splashclean.capture
 
+import io.github.kunkai2002.splashclean.data.l10n
 import android.accessibilityservice.AccessibilityService
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -186,7 +187,7 @@ object CaptureFlow {
     fun start(context: Context) {
         val service = CleanAccessibilityService.instance
         if (service == null) {
-            Toast.makeText(context, R.string.capture_need_service, Toast.LENGTH_LONG).show()
+            Toast.makeText(context, context.l10n().getString(R.string.capture_need_service), Toast.LENGTH_LONG).show()
             return
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -196,7 +197,7 @@ object CaptureFlow {
             service.takeSnapshot { result ->
                 handler.post {
                     result.onSuccess { path -> notifyCaptured(service, path) }
-                        .onFailure { Toast.makeText(service, R.string.capture_failed, Toast.LENGTH_LONG).show() }
+                        .onFailure { Toast.makeText(service, service.l10n().getString(R.string.capture_failed), Toast.LENGTH_LONG).show() }
                 }
             }
         }, 450)
@@ -212,8 +213,8 @@ object CaptureFlow {
         )
         val n = NotificationCompat.Builder(context, Notifications.CHANNEL_EVENTS)
             .setSmallIcon(R.drawable.ic_stat)
-            .setContentTitle(context.getString(R.string.capture_done_title))
-            .setContentText(context.getString(R.string.capture_done_text))
+            .setContentTitle(context.l10n().getString(R.string.capture_done_title))
+            .setContentText(context.l10n().getString(R.string.capture_done_text))
             .setAutoCancel(true)
             .setGroup("capture")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
