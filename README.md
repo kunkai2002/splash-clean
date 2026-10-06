@@ -4,6 +4,18 @@
 
 [English](#english)
 
+## 下载
+
+[Releases](https://github.com/kunkai2002/splash-clean/releases/latest) 里选一个：
+
+| 文件 | 适用 |
+|---|---|
+| `…-arm64-v8a.apk` | 绝大多数手机（2017 年以后） |
+| `…-armeabi-v7a.apk` | 更老的 32 位手机 |
+| `…-universal.apk` | 不确定时用这个（较大） |
+
+新版本直接覆盖安装，设置和规则都会保留。
+
 ## 它做什么
 
 打开应用后的头几秒，开屏净会依次用下面几层方法找到「跳过」并点掉：
@@ -30,7 +42,8 @@
 ## 安装与设置
 
 1. 安装 APK（一般手机用 `arm64-v8a` 版）。
-2. 打开应用 → 首页「设置检查」逐项完成：开启无障碍服务、长期不掉（授权）、社区规则、电池不限制、本机保活设置。
+2. 打开应用 → 首页「设置检查」逐项完成：开启无障碍服务、长期不掉（授权）、社区规则、电池不限制、本机保活设置；小米、OPPO、vivo 等会多一项「应用列表权限」。
+   语言在「设置 → 语言」（简体／繁體／English，或跟随系统）。
 3. Android 13 以上开启无障碍时提示「受限制的设置」：先试着开一次，再到「应用信息」右上角 ⋮ →「允许受限制的设置」。完成「长期不掉」授权就不需要这一步。
 
 一次授权的两种方式：
@@ -72,6 +85,8 @@
 
 正式签名：`-PsplashCleanSigning=/路径/signing.properties`（内容：`storeFile`、`storePassword`、`keyAlias`、`keyPassword`）。不提供时用 debug 签名。
 
+GitHub Actions（`.github/workflows/build.yml`）每次推送都会跑单元测试并打包；推 `v*` 标签且仓库设了签名密钥（`SIGNING_KEYSTORE_BASE64`、`SIGNING_STORE_PASSWORD`、`SIGNING_KEY_ALIAS`、`SIGNING_KEY_PASSWORD`）时，自动把签好名的 APK 发到 Releases。
+
 `testbed/` 是模拟各种开屏广告的测试应用（穿山甲式、「5s | 跳过」、画在画布上的按钮、更新弹窗、不该点的「跳过片头」、无文字的关闭图标、摇一摇感应器计数），只用于在模拟器上验证，不发布。
 
 ## 授权
@@ -83,6 +98,9 @@ GPL-3.0（见 `LICENSE`）。使用的第三方代码与数据见 [THIRD_PARTY_N
 ## English
 
 SplashClean automatically skips splash-screen ads and closes pop-up ads and update prompts on Android, **without root**.
+
+Download: [Releases](https://github.com/kunkai2002/splash-clean/releases/latest) — `arm64-v8a` for most phones, `armeabi-v7a` for old 32-bit phones, `universal` if unsure.
+UI languages: English, 简体中文, 繁體中文 (Settings → Language).
 
 - **Rules**: GKD-format rules (built-in generic rules + optional community subscriptions covering ~1000 apps), executed through an accessibility service. The selector engine is GKD's own `gkd-selector`.
 - **OCR fallback** (Android 11+): when a skip button has no text in the accessibility tree, a screenshot is read on-device with PaddleOCR (PP-OCRv4, ONNX Runtime).
