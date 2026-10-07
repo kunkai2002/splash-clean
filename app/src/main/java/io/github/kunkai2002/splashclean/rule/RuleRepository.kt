@@ -95,9 +95,27 @@ object RuleRepository {
         val categories: Map<String, Boolean>,
         val groups: Map<String, Boolean>,
         val subs: List<Pair<Long, Boolean>>,
+        val globalExcludes: Set<String>,
     ) {
-        constructor(s: Settings) : this(s.categoryOverrides, s.groupOverrides, s.subscriptions.map { it.id to it.enabled })
+        constructor(s: Settings) : this(
+            s.categoryOverrides, s.groupOverrides, s.subscriptions.map { it.id to it.enabled }, s.globalExcludes,
+        )
     }
+
+    /**
+     * Apps whose own screens are often mistaken for ads by generic rules. Built-in global groups list them
+     * as `enable: false` (keep `builtin_rules.json5` in sync) and the OCR fallback skips them.
+     */
+    val RISKY_APPS = setOf(
+        "com.xunmeng.pinduoduo", // 拼多多
+        "com.eg.android.AlipayGphone", // 支付宝
+        "com.sankuai.meituan", // 美团
+        "com.taptap", // TapTap
+    )
+
+    fun ocrAllowed(appId: String): Boolean = appId !in RISKY_APPS && appId !in Prefs.value.ocrDisabledApps
+
+    fun globalExcludeKey(subsId: Long, groupKey: Int, appId: String) = "$subsId|$groupKey|$appId"
 
     private fun loadAll() {
         runCatching {
@@ -139,13 +157,7 @@ object RuleRepository {
             subscriptions[BUILTIN_ID]?.let { add(it) }
         }.filter { it.id == USER_ID || it.id == BUILTIN_ID || it.id in enabledIds }
 
-        fun categoryEnabled(subs: RawSubscription, groupName: String): Boolean? {
-            val c = subs.getCategory(groupName)
-            val name = c?.name ?: groupName.substringBefore('-')
-            settings.categoryOverrides[Prefs.categoryKey(subs.id, name)]?.let { return it }
-            if (name in DEFAULT_ON_CATEGORIES) return true
-            return c?.enable
-        }
+        fun categoryEnabled(subs: RawSubscription, groupName: String) = categoryEnabled(settings, subs, groupName)
 
         // Global groups provided by third-party subscriptions replace our built-in fallback with the same prefix.
         val thirdPartyGlobalPrefixes = active.filter { it.id != BUILTIN_ID }
@@ -168,10 +180,10 @@ object RuleRepository {
                     ?: (if (prefix in DEFAULT_ON_CATEGORIES) true else null)
                     ?: group.enable ?: true
                 if (!enabled || !group.valid) continue
-                val excluded = group.disableIfAppGroupMatch?.let { n ->
+                val excluded = (group.disableIfAppGroupMatch?.let { n ->
                     val gName = n.ifEmpty { group.name }
                     appGroupNames.filter { it.second.startsWith(gName) }.map { it.first }.toHashSet()
-                } ?: emptySet()
+                } ?: emptySet()) + userExcludedApps(settings, subs.id, group.key)
                 val resolved = ResolvedGlobalGroup(group, subs, excluded)
                 val rules = group.rules.map { GlobalRule(it, resolved, installed) { InstalledApps.launcherAppId } }
                 groupToRules[group] = rules
@@ -202,6 +214,99 @@ object RuleRepository {
         }
         _summary.value = RuleSummary(globalRules, appRules, appRules.size, groupCount, System.currentTimeMillis())
         Log.i(TAG, "rules rebuilt: ${globalRules.size} global, ${appRules.size} apps, $groupCount groups in ${System.currentTimeMillis() - start} ms")
+    }
+
+    private fun categoryEnabled(settings: Settings, subs: RawSubscription, groupName: String): Boolean? {
+        val c = subs.getCategory(groupName)
+        val name = c?.name ?: groupName.substringBefore('-')
+        settings.categoryOverrides[Prefs.categoryKey(subs.id, name)]?.let { return it }
+        if (name in DEFAULT_ON_CATEGORIES) return true
+        return c?.enable
+    }
+
+    private fun userExcludedApps(settings: Settings, subsId: Long, groupKey: Int): Set<String> {
+        val prefix = "$subsId|$groupKey|"
+        return settings.globalExcludes.filter { it.startsWith(prefix) }.map { it.substring(prefix.length) }.toHashSet()
+    }
+
+    // ---- per-app view ---------------------------------------------------------------------------
+
+    enum class Lock { AUTHOR_EXCLUDED, REPLACED_BY_APP_RULE }
+
+    /** One rule group as it applies to one app (for the per-app page). */
+    data class AppGroupItem(
+        val subsId: Long,
+        val subsName: String,
+        val groupKey: Int,
+        val name: String,
+        val desc: String?,
+        val global: Boolean,
+        val enabled: Boolean,
+        /** Set when the switch cannot turn it on for this app. */
+        val lock: Lock? = null,
+    )
+
+    private fun activeSubscriptions(settings: Settings): List<RawSubscription> {
+        val enabledIds = settings.subscriptions.filter { it.enabled }.map { it.id }.toSet()
+        return buildList {
+            subscriptions[USER_ID]?.let { add(it) }
+            settings.subscriptions.filter { it.id in enabledIds }.forEach { src -> subscriptions[src.id]?.let { add(it) } }
+            subscriptions[BUILTIN_ID]?.let { add(it) }
+        }
+    }
+
+    fun groupsForApp(appId: String): List<AppGroupItem> {
+        val settings = Prefs.value
+        val active = activeSubscriptions(settings)
+        val thirdPartyGlobalPrefixes = active.filter { it.id != BUILTIN_ID }
+            .flatMap { s -> s.globalGroups.map { it.name.substringBefore('-') } }.toSet()
+        val appGroupNames = active.flatMap { s ->
+            s.apps.filter { it.id == appId }.flatMap { a -> a.groups.filter { it.ignoreGlobalGroupMatch != true }.map { it.name } }
+        }
+        val out = mutableListOf<AppGroupItem>()
+        for (subs in active) {
+            subs.apps.find { it.id == appId }?.groups?.forEach { g ->
+                val enabled = settings.groupOverrides[Prefs.groupKey(subs.id, appId, g.key)]
+                    ?: categoryEnabled(settings, subs, g.name) ?: g.enable ?: true
+                out += AppGroupItem(subs.id, subs.name, g.key, g.name, g.desc, false, enabled && g.valid)
+            }
+        }
+        for (subs in active) {
+            for (g in subs.globalGroups) {
+                val prefix = g.name.substringBefore('-')
+                if (subs.id == BUILTIN_ID && prefix in thirdPartyGlobalPrefixes) continue
+                val groupOn = settings.groupOverrides[Prefs.groupKey(subs.id, null, g.key)]
+                    ?: (if (prefix in DEFAULT_ON_CATEGORIES) true else null) ?: g.enable ?: true
+                if (!groupOn || !g.valid) continue
+                val authorExcluded = g.appIdEnable[appId] == false
+                val replaced = g.disableIfAppGroupMatch?.let { n ->
+                    val gName = n.ifEmpty { g.name }
+                    appGroupNames.any { it.startsWith(gName) }
+                } ?: false
+                val userOff = globalExcludeKey(subs.id, g.key, appId) in settings.globalExcludes
+                out += AppGroupItem(
+                    subs.id, subs.name, g.key, g.name, g.desc, true,
+                    enabled = !userOff && !authorExcluded && !replaced,
+                    lock = when {
+                        authorExcluded -> Lock.AUTHOR_EXCLUDED
+                        replaced -> Lock.REPLACED_BY_APP_RULE
+                        else -> null
+                    },
+                )
+            }
+        }
+        return out
+    }
+
+    fun setGroupEnabledForApp(subsId: Long, groupKey: Int, global: Boolean, appId: String, enabled: Boolean) {
+        Prefs.update { s ->
+            if (global) {
+                val k = globalExcludeKey(subsId, groupKey, appId)
+                s.copy(globalExcludes = if (enabled) s.globalExcludes - k else s.globalExcludes + k)
+            } else {
+                s.copy(groupOverrides = s.groupOverrides + (Prefs.groupKey(subsId, appId, groupKey) to enabled))
+            }
+        }
     }
 
     // ---- subscriptions -------------------------------------------------------------------------

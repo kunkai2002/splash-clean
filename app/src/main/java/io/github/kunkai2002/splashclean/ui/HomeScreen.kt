@@ -6,6 +6,7 @@ import android.os.Build
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -46,6 +48,8 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import io.github.kunkai2002.splashclean.Pages
 import io.github.kunkai2002.splashclean.R
 import io.github.kunkai2002.splashclean.data.ActionEntry
+import io.github.kunkai2002.splashclean.update.UpdateState
+import io.github.kunkai2002.splashclean.update.Updater
 import io.github.kunkai2002.splashclean.data.ActionLog
 import io.github.kunkai2002.splashclean.data.InstalledApps
 import io.github.kunkai2002.splashclean.data.Prefs
@@ -85,8 +89,21 @@ fun HomeScreen(modifier: Modifier, open: (String) -> Unit, goRules: () -> Unit) 
         tick++
     }
     val today = if (counters.day == formatTime(System.currentTimeMillis(), "yyyyMMdd")) counters.today else 0
+    var mistake by remember { mutableStateOf<ActionEntry?>(null) }
+    mistake?.let { MistakeDialog(it, onDismiss = { mistake = null }, openApp = { id -> open(Pages.app(id)) }) }
+    val update by Updater.state.collectAsState()
 
     LazyColumn(modifier.fillMaxSize()) {
+        val available = update as? UpdateState.Available
+        if (available != null) {
+            item {
+                SectionCard(stringResource(R.string.update_banner, available.info.version)) {
+                    FilledTonalButton(onClick = { scope.launch { Updater.downloadAndInstall(context, available.info) } }) {
+                        Text(stringResource(R.string.update_install))
+                    }
+                }
+            }
+        }
         item {
             SectionCard {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -200,7 +217,7 @@ fun HomeScreen(modifier: Modifier, open: (String) -> Unit, goRules: () -> Unit) 
                 } else {
                     entries.take(5).forEachIndexed { i, e ->
                         if (i > 0) HorizontalDivider()
-                        LogRow(e)
+                        LogRow(e) { mistake = e }
                     }
                     TextButton(onClick = goRules) { Text(stringResource(R.string.home_manage_rules)) }
                 }
@@ -239,15 +256,24 @@ private fun CheckRow(ok: Boolean?, title: String, desc: String, action: String?,
 }
 
 @Composable
-fun LogRow(e: ActionEntry) {
+fun LogRow(e: ActionEntry, onClick: (() -> Unit)? = null) {
     val context = LocalContext.current
     val label = remember(e.appId) { InstalledApps.label(context, e.appId) }
-    Row(Modifier.fillMaxWidth().padding(vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        Modifier.fillMaxWidth().let { if (onClick != null) it.clickable(onClick = onClick) else it }.padding(vertical = 6.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
         Column(Modifier.weight(1f)) {
             Text(label, style = MaterialTheme.typography.bodyLarge)
+            val subsText = when {
+                e.subsId == io.github.kunkai2002.splashclean.rule.RuleRepository.BUILTIN_ID -> stringResource(R.string.subs_builtin)
+                e.subsId == io.github.kunkai2002.splashclean.rule.RuleRepository.USER_ID || e.subscription == "My rules" ->
+                    stringResource(R.string.rules_mine_title)
+                else -> e.subscription
+            }
             Text(
                 (if (e.source == "ocr") stringResource(R.string.log_ocr_group, e.groupName) else e.groupName) +
-                    if (e.subscription.isNotBlank()) " · ${e.subscription}" else "",
+                    if (subsText.isNotBlank()) " · $subsText" else "",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -266,13 +292,20 @@ fun LogRow(e: ActionEntry) {
 }
 
 @Composable
-fun LogScreen(modifier: Modifier) {
+fun LogScreen(modifier: Modifier, openApp: (String) -> Unit) {
     val entries by ActionLog.entries.collectAsState()
+    var mistake by remember { mutableStateOf<ActionEntry?>(null) }
+    mistake?.let { MistakeDialog(it, onDismiss = { mistake = null }, openApp = openApp) }
     LazyColumn(modifier.fillMaxSize()) {
         item {
             Text(
                 stringResource(R.string.log_title), style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
+            )
+            Text(
+                stringResource(R.string.log_tap_hint), style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
             )
         }
         if (entries.isEmpty()) {
@@ -280,7 +313,7 @@ fun LogScreen(modifier: Modifier) {
         }
         items(entries, key = { it.time.toString() + it.appId + it.groupName }) { e ->
             Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
-                LogRow(e)
+                LogRow(e) { mistake = e }
                 HorizontalDivider()
             }
         }

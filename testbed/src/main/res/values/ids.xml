@@ -3,4 +3,5 @@
     <!-- Same resource name as the Pangle SDK's splash skip button. -->
     <item name="tt_splash_skip_btn" type="id" />
     <item name="close_x" type="id" />
+    <item name="close_loop" type="id" />
 </resources>

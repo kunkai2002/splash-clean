@@ -177,6 +177,54 @@
     <string name="status_running">開屏淨執行中</string>
     <string name="status_today">今天已跳過 %1$d 次</string>
 
+    <string name="mistake_title">是否錯誤識別廣告？</string>
+    <string name="mistake_body">「%1$s」在 %2$s 裡 10 秒內點了 3 次。如果這是正常頁面，就在這個應用關掉這條規則。</string>
+    <string name="mistake_yes">是，關掉這條</string>
+    <string name="mistake_no">不是</string>
+    <string name="mistake_disabled">已在 %2$s 關掉「%1$s」</string>
+    <string name="mistake_dialog_title">這次點錯了？</string>
+    <string name="mistake_dialog_body">在 %2$s 關掉「%1$s」？其他應用照常使用。</string>
+    <string name="mistake_dialog_old">這筆紀錄早於「各應用設定」，請打開 %1$s 的規則頁手動關掉。</string>
+    <string name="mistake_disable">關掉</string>
+    <string name="mistake_open_app">這個應用的規則</string>
+    <string name="log_tap_hint">點錯了不是廣告的地方？點一下那筆紀錄就能關掉。</string>
+    <string name="log_empty_app">這個應用還沒有任何紀錄。</string>
+
+    <string name="apps_title">各應用設定</string>
+    <string name="apps_hint">關掉開關＝這個應用完全不處理；點進去可以選這個應用用哪些規則。</string>
+    <string name="apps_row_meta">專屬規則 %1$d 組 · 已跳過 %2$d 次</string>
+    <string name="apps_entry_desc">逐個應用決定要不要套規則、套哪些規則。</string>
+    <string name="apps_open">打開各應用設定</string>
+    <string name="app_master">在這個應用使用開屏淨</string>
+    <string name="app_own_rules">這個應用的專屬規則</string>
+    <string name="app_own_rules_empty">訂閱裡沒有為這個應用寫的規則。</string>
+    <string name="app_global_rules">通用規則</string>
+    <string name="app_global_rules_desc">在所有應用都會跑的規則；在這裡關掉只影響這個應用。</string>
+    <string name="app_lock_author">規則作者已排除這個應用</string>
+    <string name="app_lock_replaced">已由這個應用的專屬規則取代</string>
+    <string name="app_ocr_desc">只影響這個應用</string>
+    <string name="app_ocr_risky">這個應用固定不截圖認字（它的頁面常被誤認成廣告）</string>
+    <string name="app_recent">最近在這個應用</string>
+    <string name="subs_builtin">內建規則</string>
+
+    <string name="update_title">更新</string>
+    <string name="update_current">目前版本 %1$s</string>
+    <string name="update_latest">已經是最新版。</string>
+    <string name="update_available">有新版本 %1$s（%2$.1f MB）</string>
+    <string name="update_install">下載並安裝</string>
+    <string name="update_browser">在瀏覽器開啟</string>
+    <string name="update_downloading">正在下載… %1$d%%</string>
+    <string name="update_need_permission">請在剛打開的設定裡允許開屏淨安裝應用程式，回來後點「繼續」。</string>
+    <string name="update_continue">繼續</string>
+    <string name="update_installing">請在系統視窗裡確認安裝。</string>
+    <string name="update_failed">更新失敗：%1$s</string>
+    <string name="update_check">檢查更新</string>
+    <string name="update_auto">自動檢查更新</string>
+    <string name="update_auto_desc">打開應用時檢查，每天最多一次</string>
+    <string name="update_banner">有新版本 %1$s</string>
+    <string name="update_no_apk">新版本裡沒有適合這支手機的安裝檔。</string>
+    <string name="update_bad_signature">下載的檔案不是開屏淨簽名的，已拒絕安裝。</string>
+
     <string name="dns_title">攔截廣告網址（本機 VPN）</string>
     <string name="dns_desc">讓應用下載不到第三方廣告聯盟的廣告（穿山甲、優量匯、百度、快手、Sigmob…）。只有網域查詢經過它，任何資料都不會離開手機。淘寶、京東、知乎、B站等大應用的自家廣告攔不住，那部分仍靠自動跳過。它會佔用手機唯一的 VPN 位置：不能和其他 VPN 或代理軟體同時開。</string>
     <string name="dns_switch">攔截廣告網址</string>

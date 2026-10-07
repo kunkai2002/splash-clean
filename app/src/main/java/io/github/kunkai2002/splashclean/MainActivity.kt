@@ -24,7 +24,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import io.github.kunkai2002.splashclean.ui.AppListScreen
 import io.github.kunkai2002.splashclean.ui.AppPickerScreen
+import io.github.kunkai2002.splashclean.ui.AppRulesScreen
 import io.github.kunkai2002.splashclean.ui.AuthorizeScreen
 import io.github.kunkai2002.splashclean.ui.GuideScreen
 import io.github.kunkai2002.splashclean.ui.HomeScreen
@@ -50,21 +52,33 @@ class MainActivity : ComponentActivity() {
 
 object Pages {
     const val AUTHORIZE = "authorize"
-    const val EXCLUDE = "exclude"
+    const val APPS = "apps"
     const val GUIDE = "guide"
     const val SHAKE = "shake"
+    private const val APP_PREFIX = "app:"
+    fun app(appId: String) = APP_PREFIX + appId
+    fun appIdOf(page: String?): String? = page?.takeIf { it.startsWith(APP_PREFIX) }?.removePrefix(APP_PREFIX)
 }
 
 @Composable
 fun MainScaffold() {
     var tab by rememberSaveable { mutableIntStateOf(0) }
-    var page by rememberSaveable { mutableStateOf<String?>(null) }
+    // Sub-page stack (app list → one app), so Back returns to where the user came from.
+    var stack by rememberSaveable { mutableStateOf(listOf<String>()) }
+    val page = stack.lastOrNull()
     val context = androidx.compose.ui.platform.LocalContext.current
-    BackHandler(enabled = page != null) {
+    val back: () -> Unit = {
         if (page == Pages.SHAKE) io.github.kunkai2002.splashclean.adb.ShakeBlocker.applyAsync(context)
-        page = null
+        stack = stack.dropLast(1)
     }
-    val open: (String) -> Unit = { page = it }
+    BackHandler(enabled = page != null) { back() }
+    val open: (String) -> Unit = { stack = stack + it }
+    androidx.compose.runtime.LaunchedEffect(Unit) {
+        val s = io.github.kunkai2002.splashclean.data.Prefs.value
+        if (s.autoCheckUpdate && System.currentTimeMillis() - s.lastUpdateCheck > 20 * 3600_000L) {
+            io.github.kunkai2002.splashclean.update.Updater.check(context, manual = false)
+        }
+    }
     Scaffold(
         bottomBar = {
             if (page == null) {
@@ -88,18 +102,17 @@ fun MainScaffold() {
         },
     ) { padding ->
         val m = Modifier.padding(padding)
-        when (page) {
-            Pages.AUTHORIZE -> AuthorizeScreen(m) { page = null }
-            Pages.EXCLUDE -> AppPickerScreen(m) { page = null }
-            Pages.SHAKE -> AppPickerScreen(m, shake = true) {
-                page = null
-                io.github.kunkai2002.splashclean.adb.ShakeBlocker.applyAsync(context)
-            }
-            Pages.GUIDE -> GuideScreen(m) { page = null }
+        val appPage = Pages.appIdOf(page)
+        when {
+            appPage != null -> AppRulesScreen(m, appPage, back)
+            page == Pages.AUTHORIZE -> AuthorizeScreen(m, back)
+            page == Pages.APPS -> AppListScreen(m, openApp = { open(Pages.app(it)) }, onBack = back)
+            page == Pages.SHAKE -> AppPickerScreen(m, shake = true, onBack = back)
+            page == Pages.GUIDE -> GuideScreen(m, back)
             else -> when (tab) {
                 0 -> HomeScreen(m, open) { tab = 1 }
-                1 -> RulesScreen(m)
-                2 -> LogScreen(m)
+                1 -> RulesScreen(m, open)
+                2 -> LogScreen(m) { open(Pages.app(it)) }
                 else -> SettingsScreen(m, open)
             }
         }

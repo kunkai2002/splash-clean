@@ -189,6 +189,34 @@ class CustomScene : Scene() {
     }
 }
 
+/** A "close" button that comes back 0.6 s after every tap: a rule that matches it would loop. */
+class LoopScene : Scene() {
+    override val scene = "loop"
+    private var taps = 0
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val root = FrameLayout(this).apply { setBackgroundColor(Color.WHITE) }
+        root.addView(TextView(this).apply { text = "个人中心"; textSize = 24f; gravity = Gravity.CENTER }, FrameLayout.LayoutParams(-1, -1))
+        val handler = Handler(Looper.getMainLooper())
+        lateinit var btn: View
+        btn = TextView(this).apply {
+            id = R.id.close_loop
+            text = "关闭"
+            textSize = 16f
+            setPadding(24.dp(), 12.dp(), 24.dp(), 12.dp())
+            setBackgroundColor(Color.LTGRAY)
+            setOnClickListener {
+                taps++
+                Log.i(TAG, "TAP loop $taps")
+                visibility = View.GONE
+                handler.postDelayed({ btn.visibility = View.VISIBLE }, 600)
+            }
+        }
+        root.addView(btn, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.END).apply { setMargins(0, 48.dp(), 16.dp(), 0) })
+        setContentView(root)
+    }
+}
+
 /** Counts accelerometer events per second, like a "shake to open" splash ad would listen. */
 class ShakeScene : Scene() {
     override val scene = "shake"

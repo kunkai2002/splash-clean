@@ -32,6 +32,14 @@ data class Settings(
     val categoryOverrides: Map<String, Boolean> = emptyMap(),
     /** "subsId|appId|groupKey" or "subsId|*|groupKey" (global) -> enabled. */
     val groupOverrides: Map<String, Boolean> = emptyMap(),
+    /** Global rule groups switched off for one app: "subsId|groupKey|appId". */
+    val globalExcludes: Set<String> = emptySet(),
+    /** Apps where the screenshot (OCR) fallback must not run. */
+    val ocrDisabledApps: Set<String> = emptySet(),
+    /** "subsId|groupKey|appId" (or "ocr||appId") the user said are fine: never ask "mistake?" again. */
+    val noAskRules: Set<String> = emptySet(),
+    val autoCheckUpdate: Boolean = true,
+    val lastUpdateCheck: Long = 0,
     val subscriptions: List<SubscriptionSource> = emptyList(),
     val autoUpdateSubscriptions: Boolean = true,
     val dnsBlockEnabled: Boolean = false,

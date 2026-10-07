@@ -38,6 +38,43 @@ class RulesParseTest {
     }
 
     @Test
+    fun builtinExclusionsMatchRiskyApps() {
+        val subs = RawSubscription.parse(File("src/main/assets/builtin_rules.json5").readText())
+        subs.globalGroups.forEach { g ->
+            val off = g.apps.orEmpty().filter { it.enable == false }.map { it.id }.toSet()
+            assertEquals(g.name, io.github.kunkai2002.splashclean.rule.RuleRepository.RISKY_APPS, off)
+            assertEquals(false, g.appIdEnable["com.xunmeng.pinduoduo"])
+        }
+    }
+
+    @Test
+    fun updaterVersionAndAsset() {
+        val u = io.github.kunkai2002.splashclean.update.Updater
+        assertTrue(u.isNewer("v0.4.0", "0.3.0"))
+        assertTrue(u.isNewer("v0.10.0", "0.9.9"))
+        assertTrue(u.isNewer("1.0", "0.9.12"))
+        assertFalse(u.isNewer("v0.3.0", "0.3.0"))
+        assertFalse(u.isNewer("v0.2.9", "0.3.0"))
+        val names = listOf("SplashClean-v0.4.0-armeabi-v7a.apk", "SplashClean-v0.4.0-arm64-v8a.apk", "SplashClean-v0.4.0-universal.apk")
+        assertEquals("SplashClean-v0.4.0-arm64-v8a.apk", u.pickAsset(names, listOf("arm64-v8a", "armeabi-v7a")))
+        assertEquals("SplashClean-v0.4.0-armeabi-v7a.apk", u.pickAsset(names, listOf("armeabi-v7a")))
+        assertEquals("SplashClean-v0.4.0-universal.apk", u.pickAsset(names, listOf("x86_64")))
+    }
+
+    @Test
+    fun repeatGuardAsksOnThirdHitWithinTenSeconds() {
+        val g = io.github.kunkai2002.splashclean.engine.RepeatGuard
+        g.clearForTest()
+        val k = g.key(-1, 0, "com.example")
+        assertFalse(g.record(k, 1_000))
+        assertFalse(g.record(k, 5_000))
+        assertFalse(g.record(k, 20_000)) // first hit fell out of the 10 s window
+        assertFalse(g.record(k, 22_000))
+        assertTrue(g.record(k, 24_000)) // 20 s, 22 s, 24 s
+        g.clearForTest()
+    }
+
+    @Test
     fun skipTextMatcher() {
         listOf("跳过", "跳过 5", "5s | 跳过", "5s丨跳过", "跳過", "Skip", "SKIP 3", "跳过广告", "3 跳过", "跳过>").forEach {
             assertTrue(it, SplashFallback.isSkipText(it))

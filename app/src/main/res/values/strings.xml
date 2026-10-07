@@ -180,6 +180,54 @@
     <string name="status_running">SplashClean is running</string>
     <string name="status_today">%1$d ads skipped today</string>
 
+    <string name="mistake_title">Mistaken for an ad?</string>
+    <string name="mistake_body">\"%1$s\" tapped 3 times in 10 seconds in %2$s. If this is a normal screen, switch the rule off for this app.</string>
+    <string name="mistake_yes">Yes, switch it off</string>
+    <string name="mistake_no">No</string>
+    <string name="mistake_disabled">\"%1$s\" is off in %2$s</string>
+    <string name="mistake_dialog_title">This one was a mistake?</string>
+    <string name="mistake_dialog_body">Switch off \"%1$s\" in %2$s? Other apps keep using it.</string>
+    <string name="mistake_dialog_old">This entry is older than the per-app settings. Open %1$s\'s rules to switch rules off.</string>
+    <string name="mistake_disable">Switch off</string>
+    <string name="mistake_open_app">This app\'s rules</string>
+    <string name="log_tap_hint">Tap an entry if it tapped something that was not an ad.</string>
+    <string name="log_empty_app">Nothing happened in this app yet.</string>
+
+    <string name="apps_title">Per-app settings</string>
+    <string name="apps_hint">Switch an app off to leave it alone completely, or open it to choose which rules it uses.</string>
+    <string name="apps_row_meta">%1$d own rule groups · skipped %2$d times</string>
+    <string name="apps_entry_desc">Choose for each app whether rules run and which ones.</string>
+    <string name="apps_open">Open per-app settings</string>
+    <string name="app_master">Use SplashClean in this app</string>
+    <string name="app_own_rules">Rules for this app</string>
+    <string name="app_own_rules_empty">No subscription has rules made for this app.</string>
+    <string name="app_global_rules">Generic rules</string>
+    <string name="app_global_rules_desc">Rules that run in every app; switching one off here affects only this app.</string>
+    <string name="app_lock_author">the rule\'s author left this app out</string>
+    <string name="app_lock_replaced">replaced by this app\'s own rule</string>
+    <string name="app_ocr_desc">Only in this app</string>
+    <string name="app_ocr_risky">Off for this app (its pages are often mistaken for ads)</string>
+    <string name="app_recent">Recently in this app</string>
+    <string name="subs_builtin">Built-in rules</string>
+
+    <string name="update_title">Updates</string>
+    <string name="update_current">Installed version %1$s</string>
+    <string name="update_latest">You have the latest version.</string>
+    <string name="update_available">Version %1$s is available (%2$.1f MB)</string>
+    <string name="update_install">Download and install</string>
+    <string name="update_browser">Open in browser</string>
+    <string name="update_downloading">Downloading… %1$d%%</string>
+    <string name="update_need_permission">Allow SplashClean to install apps (Settings just opened), then tap Continue.</string>
+    <string name="update_continue">Continue</string>
+    <string name="update_installing">Confirm the installation in the system dialog.</string>
+    <string name="update_failed">Update failed: %1$s</string>
+    <string name="update_check">Check for updates</string>
+    <string name="update_auto">Check automatically</string>
+    <string name="update_auto_desc">When the app opens, at most once a day</string>
+    <string name="update_banner">Version %1$s is available</string>
+    <string name="update_no_apk">The new release has no APK for this phone.</string>
+    <string name="update_bad_signature">The downloaded file is not signed by SplashClean; it was not installed.</string>
+
     <string name="dns_title">Block ad servers (local VPN)</string>
     <string name="dns_desc">Stops apps from downloading ads from third-party ad networks (Pangle, GDT, Baidu, Kuaishou, Sigmob…). Only DNS lookups go through it; nothing leaves the phone. It cannot block the in-house ads of big apps (Taobao, JD, Zhihu, Bilibili…) — skipping still handles those. It uses the phone\'s single VPN slot: it cannot run together with another VPN or proxy app.</string>
     <string name="dns_switch">Block ad servers</string>

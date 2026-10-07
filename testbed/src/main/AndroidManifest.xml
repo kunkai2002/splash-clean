@@ -15,5 +15,6 @@
         <activity android:name=".IntroScene" android:exported="true" android:launchMode="singleTask" />
         <activity android:name=".ShakeScene" android:exported="true" android:launchMode="singleTask" />
         <activity android:name=".CustomScene" android:exported="true" android:launchMode="singleTask" />
+        <activity android:name=".LoopScene" android:exported="true" android:launchMode="singleTask" />
     </application>
 </manifest>

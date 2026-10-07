@@ -23,6 +23,10 @@ data class ActionEntry(
     val action: String = "",
     /** Milliseconds between entering the app and the action. */
     val sinceAppEnter: Long = -1,
+    /** Which rule group acted (null for OCR and for entries written before 0.4.0). */
+    val subsId: Long? = null,
+    val groupKey: Int? = null,
+    val global: Boolean = false,
 )
 
 @Serializable

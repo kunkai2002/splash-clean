@@ -69,8 +69,8 @@ fun SettingsScreen(modifier: Modifier, open: (String) -> Unit) {
                 SwitchRow(stringResource(R.string.set_autoupdate), stringResource(R.string.set_autoupdate_desc), s.autoUpdateSubscriptions) { v ->
                     Prefs.update { it.copy(autoUpdateSubscriptions = v) }
                 }
-                SettingLink(stringResource(R.string.set_exclude), stringResource(R.string.set_exclude_desc, s.disabledApps.size)) {
-                    open(Pages.EXCLUDE)
+                SettingLink(stringResource(R.string.apps_title), stringResource(R.string.set_exclude_desc, s.disabledApps.size)) {
+                    open(Pages.APPS)
                 }
             }
         }
@@ -99,6 +99,7 @@ fun SettingsScreen(modifier: Modifier, open: (String) -> Unit) {
                 SettingLink(stringResource(R.string.check_brand), stringResource(R.string.check_brand_desc)) { open(Pages.GUIDE) }
             }
         }
+        item { UpdateSection() }
         item { LanguageSection() }
         item {
             SectionCard(stringResource(R.string.set_about_title)) {

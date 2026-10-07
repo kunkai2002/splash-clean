@@ -26,6 +26,13 @@
       actionCdKey: 0,
       actionMaximumKey: 0,
       disableIfAppGroupMatch: '开屏广告',
+      // Apps whose own pages get mistaken for ads (keep in sync with RuleRepository.RISKY_APPS)
+      apps: [
+        { id: 'com.xunmeng.pinduoduo', enable: false },
+        { id: 'com.eg.android.AlipayGphone', enable: false },
+        { id: 'com.sankuai.meituan', enable: false },
+        { id: 'com.taptap', enable: false },
+      ],
       rules: [
         {
           key: 0,
@@ -72,6 +79,12 @@
       actionMaximum: 1,
       resetMatch: 'app',
       disableIfAppGroupMatch: '更新提示',
+      apps: [
+        { id: 'com.xunmeng.pinduoduo', enable: false },
+        { id: 'com.eg.android.AlipayGphone', enable: false },
+        { id: 'com.sankuai.meituan', enable: false },
+        { id: 'com.taptap', enable: false },
+      ],
       rules: [
         {
           key: 0,
@@ -91,6 +104,12 @@
       actionMaximum: 1,
       resetMatch: 'app',
       disableIfAppGroupMatch: '青少年模式',
+      apps: [
+        { id: 'com.xunmeng.pinduoduo', enable: false },
+        { id: 'com.eg.android.AlipayGphone', enable: false },
+        { id: 'com.sankuai.meituan', enable: false },
+        { id: 'com.taptap', enable: false },
+      ],
       rules: [
         {
           key: 0,

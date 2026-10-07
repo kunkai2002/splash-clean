@@ -27,6 +27,7 @@ import io.github.kunkai2002.splashclean.engine.ActionResult
 import io.github.kunkai2002.splashclean.engine.Actions
 import io.github.kunkai2002.splashclean.engine.EngineHost
 import io.github.kunkai2002.splashclean.engine.RuleEngine
+import io.github.kunkai2002.splashclean.engine.RepeatGuard
 import io.github.kunkai2002.splashclean.engine.SplashFallback
 import io.github.kunkai2002.splashclean.ocr.PaddleOcr
 import io.github.kunkai2002.splashclean.rule.EngineClock
@@ -168,9 +169,26 @@ class CleanAccessibilityService : AccessibilityService(), EngineHost {
                 time = System.currentTimeMillis(), appId = appId, activityId = activityId, source = "rule",
                 groupName = rule.groupName, subscription = rule.subscription.name, action = result.action,
                 sinceAppEnter = System.currentTimeMillis() - EngineClock.appChangeTime,
+                subsId = rule.subsId, groupKey = rule.groupKey, global = rule.isGlobal,
             )
         )
         if (result.action != "none") showActionToast()
+        val key = RepeatGuard.key(rule.subsId, rule.groupKey, appId)
+        if (RepeatGuard.record(key)) askIfMistake(key, rule, appId)
+    }
+
+    /** Same rule 3 times in 10 s: it is paused; ask whether it is mistaking a normal screen for an ad. */
+    private fun askIfMistake(key: String, rule: ResolvedRule, appId: String) {
+        val appLabel = InstalledApps.label(this, appId)
+        MistakePrompt.show(
+            this, appLabel, rule.groupName,
+            onYes = {
+                RuleRepository.setGroupEnabledForApp(rule.subsId, rule.groupKey, rule.isGlobal, appId, false)
+                Toast.makeText(this, l10n().getString(R.string.mistake_disabled, rule.groupName, appLabel), Toast.LENGTH_LONG).show()
+            },
+            onNo = { RepeatGuard.resume(key, neverAskAgain = true) },
+            onTimeout = { RepeatGuard.resume(key, neverAskAgain = false) },
+        )
     }
 
     override fun onAppEnter(appId: String, activityId: String?, time: Long) {

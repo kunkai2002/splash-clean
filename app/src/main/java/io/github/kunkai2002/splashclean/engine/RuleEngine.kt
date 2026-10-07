@@ -264,6 +264,7 @@ class RuleEngine(private val host: EngineHost) {
             if (delayRule != null && delayRule !== rule) continue
             if (rule.status != RuleStatus.StatusOk) continue
             if (byForced && !rule.checkForced()) continue
+            if (RepeatGuard.isPaused(RepeatGuard.key(rule.subsId, rule.groupKey, active.appId))) continue
             val root = ctx.root() ?: break
             val rightAppId = root.packageName?.toString() ?: break
             if (active.appId != rightAppId) {

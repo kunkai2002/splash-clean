@@ -40,7 +40,7 @@ import io.github.kunkai2002.splashclean.rule.RuleRepository
 import kotlinx.coroutines.launch
 
 @Composable
-fun RulesScreen(modifier: Modifier) {
+fun RulesScreen(modifier: Modifier, open: (String) -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val settings by Prefs.flow.collectAsState()
@@ -75,6 +75,14 @@ fun RulesScreen(modifier: Modifier) {
                 modifier = Modifier.padding16(bottom = 8),
             )
             if (busy) LinearProgressIndicator(Modifier.fillMaxWidth())
+        }
+        item {
+            SectionCard(stringResource(R.string.apps_title)) {
+                Text(stringResource(R.string.apps_entry_desc), style = MaterialTheme.typography.bodySmall)
+                OutlinedButton(onClick = { open(io.github.kunkai2002.splashclean.Pages.APPS) }) {
+                    Text(stringResource(R.string.apps_open))
+                }
+            }
         }
         items(settings.subscriptions, key = { it.id }) { src ->
             SubscriptionCard(src, loaded[src.id], settings.categoryOverrides, busy,

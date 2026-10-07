@@ -105,6 +105,9 @@ sealed class ResolvedRule(
 
     /** Name of the rule group, e.g. "开屏广告-全局"; used for logs and category stats. */
     val groupName: String get() = group.name
+    val groupKey: Int get() = group.key
+    val subsId: Long get() = subscription.id
+    val isGlobal: Boolean get() = this is GlobalRule
 
     fun isPriority(): Boolean {
         if (!priorityEnabled) return false

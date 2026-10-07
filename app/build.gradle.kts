@@ -23,8 +23,9 @@ android {
         applicationId = "io.github.kunkai2002.splashclean"
         minSdk = 24
         targetSdk = 36
-        versionCode = 3
-        versionName = "0.3.0"
+        // -PscVersionCode / -PscVersionName: only for testing the in-app update with an "older" build.
+        versionCode = (findProperty("scVersionCode") as String?)?.toInt() ?: 4
+        versionName = (findProperty("scVersionName") as String?) ?: "0.4.0"
     }
 
     signingConfigs {

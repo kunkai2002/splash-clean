@@ -44,6 +44,7 @@ class SplashFallback(
 
     fun onAppEnter(appId: String, time: Long) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R || !Prefs.value.ocrEnabled) return
+        if (!io.github.kunkai2002.splashclean.rule.RuleRepository.ocrAllowed(appId)) return
         val s = Session(appId, time)
         session = s
         // Android 11 allows one screenshot per second, Android 12+ one per 333 ms.

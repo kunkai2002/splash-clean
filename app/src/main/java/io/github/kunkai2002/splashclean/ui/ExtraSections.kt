@@ -33,6 +33,8 @@ import io.github.kunkai2002.splashclean.data.AppLocale
 import io.github.kunkai2002.splashclean.data.Prefs
 import io.github.kunkai2002.splashclean.service.KeepAliveService
 import io.github.kunkai2002.splashclean.service.Notifications
+import io.github.kunkai2002.splashclean.update.UpdateState
+import io.github.kunkai2002.splashclean.update.Updater
 import io.github.kunkai2002.splashclean.service.A11yGuard
 import io.github.kunkai2002.splashclean.vpn.Blocklist
 import io.github.kunkai2002.splashclean.vpn.DnsVpnService
@@ -145,6 +147,68 @@ fun LanguageSection() {
                 androidx.compose.material3.RadioButton(selected = selected(tag), onClick = null)
                 Text(stringResource(label), modifier = Modifier.padding(start = 8.dp))
             }
+        }
+    }
+}
+
+@Composable
+fun UpdateSection() {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val s by Prefs.flow.collectAsState()
+    val state by Updater.state.collectAsState()
+    SectionCard(stringResource(R.string.update_title)) {
+        Text(
+            stringResource(R.string.update_current, io.github.kunkai2002.splashclean.BuildConfig.VERSION_NAME),
+            style = MaterialTheme.typography.bodySmall,
+        )
+        when (val st = state) {
+            UpdateState.Idle -> Unit
+            UpdateState.Checking -> androidx.compose.material3.LinearProgressIndicator(Modifier.fillMaxWidth())
+            UpdateState.UpToDate -> Text(stringResource(R.string.update_latest), color = MaterialTheme.colorScheme.primary)
+            is UpdateState.Available -> {
+                Text(
+                    stringResource(R.string.update_available, st.info.version, st.info.size / 1_048_576f),
+                    color = MaterialTheme.colorScheme.primary,
+                )
+                if (st.info.notes.isNotBlank()) {
+                    Text(st.info.notes.lines().filter { it.isNotBlank() }.take(8).joinToString("\n"), style = MaterialTheme.typography.bodySmall)
+                }
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    FilledTonalButton(onClick = { scope.launch { Updater.downloadAndInstall(context, st.info) } }) {
+                        Text(stringResource(R.string.update_install))
+                    }
+                    androidx.compose.material3.TextButton(onClick = { Updater.openInBrowser(context, st.info.pageUrl) }) {
+                        Text(stringResource(R.string.update_browser))
+                    }
+                }
+            }
+            is UpdateState.Downloading -> {
+                Text(stringResource(R.string.update_downloading, (st.progress * 100).toInt()))
+                androidx.compose.material3.LinearProgressIndicator(progress = { st.progress }, modifier = Modifier.fillMaxWidth())
+            }
+            is UpdateState.NeedInstallPermission -> {
+                Text(stringResource(R.string.update_need_permission), style = MaterialTheme.typography.bodySmall)
+                FilledTonalButton(onClick = { scope.launch { Updater.downloadAndInstall(context, st.info) } }) {
+                    Text(stringResource(R.string.update_continue))
+                }
+            }
+            is UpdateState.Installing -> Text(stringResource(R.string.update_installing))
+            is UpdateState.Failed -> {
+                Text(stringResource(R.string.update_failed, st.message), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                androidx.compose.material3.TextButton(onClick = { Updater.openInBrowser(context, st.info?.pageUrl ?: Updater.PAGE) }) {
+                    Text(stringResource(R.string.update_browser))
+                }
+            }
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            OutlinedButton(
+                enabled = state !is UpdateState.Checking && state !is UpdateState.Downloading,
+                onClick = { scope.launch { Updater.check(context, manual = true) } },
+            ) { Text(stringResource(R.string.update_check)) }
+        }
+        SwitchRow(stringResource(R.string.update_auto), stringResource(R.string.update_auto_desc), s.autoCheckUpdate) { v ->
+            Prefs.update { it.copy(autoCheckUpdate = v) }
         }
     }
 }
